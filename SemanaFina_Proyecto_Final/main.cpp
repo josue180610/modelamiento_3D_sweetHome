@@ -44,10 +44,14 @@ int main() {
 	
 		glRotatef(rotacionX, 1.0f, 0.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
 		glRotatef(rotacionY, 0.0f, 1.0f, 0.0f);
+		enableTexture();
+		printLeftWindowAndWall();
+		printRightWindowAndWall();
+		printRearWallAndAnyObjects();
 		printSquad();
+
+		disableTexture();
 		// glRotatef(anguloRotacion, 1.0f, 1.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
-
-
 		glfwSwapBuffers(window); // intercambiar el buffer de pantalla actual
 		// con el buffer del dibujo, es decir, el render.
 		glfwPollEvents(); // Gestión de dispositivos de entrada (mouse, teclado...)

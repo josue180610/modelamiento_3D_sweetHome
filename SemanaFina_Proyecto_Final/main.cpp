@@ -20,9 +20,6 @@ int main() {
 	float rotacionZ = 2.5f;
 	ConfigModelOpenGL modeloOpenGl = ConfigModelOpenGL();
 	PrintModelOpenGL windowOpenGl = PrintModelOpenGL(y, z, xrl,true,rotacionX,rotacionY,rotacionZ);
-	if (!glfwInit()) { // Si el entorno no se inicializa correctamente
-		return -1; // termina el programa y devuelve un error
-	}
 	GLFWwindow* window;
 	modeloOpenGl.initWindowsCenter(window); // Obtengo el valor de la variable window por referencia
 	// Realizo la configuración de luminosidad para el objeto a mostrar.

@@ -1,0 +1,14 @@
+# Ignorar archivos temporales y de configuración de Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignorar carpetas de construcción
+Debug/
+Release/
+x64/
+ipch/
+
+# Ignorar archivos de configuración de IntelliSense
+.vscode/

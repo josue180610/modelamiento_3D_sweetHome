@@ -130,12 +130,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="print_objects.cpp" />
+    <ClCompile Include="C:\Users\Usuario\OneDrive\Desktop\backup\print_objects.cpp" />
+    <ClCompile Include="ConfigModelOpenGL.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="screem_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="print_objects.h" />
+    <ClInclude Include="C:\Users\Usuario\OneDrive\Desktop\backup\print_objects.h" />
+    <ClInclude Include="ConfigModelOpenGL.h" />
     <ClInclude Include="screem_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

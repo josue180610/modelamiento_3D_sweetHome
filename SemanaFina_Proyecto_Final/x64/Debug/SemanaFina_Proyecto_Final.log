@@ -1,6 +1,9 @@
-﻿  main.cpp
-  print_objects.cpp
-G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\SemanaFina_Proyecto_Final\SemanaFina_Proyecto_Final\print_objects.cpp(70,15): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+﻿  print_objects.cpp
+  ConfigModelOpenGL.cpp
+G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\SemanaFina_Proyecto_Final\SemanaFina_Proyecto_Final\ConfigModelOpenGL.cpp(171,41): warning C4305: 'argumento': truncamiento de 'double' a 'GLfloat'
+G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\SemanaFina_Proyecto_Final\SemanaFina_Proyecto_Final\ConfigModelOpenGL.cpp(189,13): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  main.cpp
+  screem_utils.cpp
   Generando código...
 LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
   SemanaFina_Proyecto_Final.vcxproj -> G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\SemanaFina_Proyecto_Final\x64\Debug\SemanaFina_Proyecto_Final.exe

@@ -2,21 +2,11 @@
 #include "screem_utils.h"   // Incluye el encabezado
 #include <iostream>
 #include "ConfigModelOpenGL.h"
+#include "PrintModelOpenGL.h"
 #define STB_IMAGE_IMPLEMENTATION // constante utilizada para implementar texturas
 
 
 using namespace std;
-float rotacionX = 0.0f;
-float rotacionY = 0.0f;
-float rotacionZ = 2.5f;
-void procesarEntrada(GLFWwindow* window) {
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) rotacionX -= 0.05f;
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) rotacionX += 0.05f;
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) rotacionY -= 0.05f;
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) rotacionY += 0.05f;
-	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) rotacionZ += 0.001f; // retroceder objeto
-	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) rotacionZ -= 0.001f; // avanzar objeto
-}
 
 GLuint texturaID[3];
 GLuint windowsWall;
@@ -25,8 +15,11 @@ int main() {
 	float y = 1.0f;
 	float z = 1.5f;
 	float xrl = 1.35f;
-	ConfigModelOpenGL modeloOpenGl = ConfigModelOpenGL(y,z,xrl);
-	
+	float rotacionX = 0.0f;
+	float rotacionY = 0.0f;
+	float rotacionZ = 2.5f;
+	ConfigModelOpenGL modeloOpenGl = ConfigModelOpenGL();
+	PrintModelOpenGL windowOpenGl = PrintModelOpenGL(y, z, xrl,true,rotacionX,rotacionY,rotacionZ);
 	if (!glfwInit()) { // Si el entorno no se inicializa correctamente
 		return -1; // termina el programa y devuelve un error
 	}
@@ -46,24 +39,24 @@ int main() {
 	while (!glfwWindowShouldClose(window)) { // Ejecutar todo lo que se encuentre en la ventana, mientras no se cierre
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // permite borrar la pantalla, antes de dibujar
 		// esto evita que las imagenes se sobrepongan y también permite eliminar el buffer de produndidad
-		procesarEntrada(window); // permite mover el objeto, es decir, la estructura
+		windowOpenGl.procesarEntrada(window, windowOpenGl.activeMove); // permite mover el objeto, es decir, la estructura
 		//Aplicar las transformaciones de visualización al cubo
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();//Reseteamos la matriz de modelo-vista
-		glTranslatef(0.0f, 0.0f, -rotacionZ); //Alejar la cámara
+		glTranslatef(0.0f, 0.0f, -windowOpenGl.rotacionZ); //Alejar la cámara
 		// glRotatef(0.0f, 1.0f, 1.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
 		// cout << "Entero: " << rotacionX << endl;
 	
-		glRotatef(rotacionX, 1.0f, 0.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
-		glRotatef(rotacionY, 0.0f, 1.0f, 0.0f);
-		modeloOpenGl.enableTexture();
+		glRotatef(windowOpenGl.rotacionX, 1.0f, 0.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
+		glRotatef(windowOpenGl.rotacionY, 0.0f, 1.0f, 0.0f);
+		windowOpenGl.enableTexture();
 
-		modeloOpenGl.printLeftWindowAndWall(texturaID[0]);
-		modeloOpenGl.printRightWindowAndWall(texturaID[0]);
-		modeloOpenGl.printRearWallAndAnyObjects(texturaID[1]);
-		modeloOpenGl.printSquad(texturaID[2]);
+		windowOpenGl.printLeftWindowAndWall(texturaID[0]);
+		windowOpenGl.printRightWindowAndWall(texturaID[0]);
+		windowOpenGl.printRearWallAndAnyObjects(texturaID[1]);
+		windowOpenGl.printSquad(texturaID[2]);
 
-		modeloOpenGl.disableTexture();
+		windowOpenGl.disableTexture();
 		// glRotatef(anguloRotacion, 1.0f, 1.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
 		glfwSwapBuffers(window); // intercambiar el buffer de pantalla actual
 		// con el buffer del dibujo, es decir, el render.

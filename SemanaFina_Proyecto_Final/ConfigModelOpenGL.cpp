@@ -5,36 +5,22 @@
 #include "include/stb_image.h" // incluimos la libreria de la carga de imágenes
 #include <stdexcept>
 
-ConfigModelOpenGL::ConfigModelOpenGL(float _y, float _z, float _xrl) {
+ConfigModelOpenGL::ConfigModelOpenGL() {
 	// Inicialización de GLFW (opcional aquí si se desea que se inicialice solo una vez)
-	y = _y;
-	z = _z;
-	xrl = _xrl;
+	
 	if (!glfwInit()) {
 		// Si el entorno no se inicializa correctamente
 		throw std::runtime_error("Error al inicializar GLFW.");// termina el programa y devuelve un error
 	}
 };
 
-
-void ConfigModelOpenGL::enableTexture() {
-	//Función para dibujar un estructura con textura
-	glEnable(GL_TEXTURE_2D); //habilitamos el uso de texturas
-
-}
-
-void ConfigModelOpenGL::disableTexture() {
-	glDisable(GL_TEXTURE_2D); //deshabilitamos el uso de texturas para otros objetos
-	//si los hubiera   
-}
-
- void ConfigModelOpenGL::initWindowsCenter(GLFWwindow*& windows) {
+void ConfigModelOpenGL::initWindowsCenter(GLFWwindow*& windows) {
 	// Inicializar GLFW
 	if (!glfwInit()) {
 		throw std::runtime_error("Error al inicializar GLFW.");
 	}
 	// Tamaño de la ventana
-	int windowWidth = 640;
+	int windowWidth = 840;
 	int windowHeight = 480;
 
 	windows = glfwCreateWindow(windowWidth, windowHeight, "Modelamiento: Interior de Hogar - Muebles", NULL, NULL);
@@ -81,7 +67,6 @@ void ConfigModelOpenGL::disableTexture() {
 
  }
 
-
  GLuint ConfigModelOpenGL::loadTextureFile(const char* path, GLuint& texturaId) {
 	 // Cargar la imagen utilizando la librería stb_image
 	 int w, h, ch; // ancho, alto y canales
@@ -114,67 +99,6 @@ void ConfigModelOpenGL::disableTexture() {
  }
 
 
- void ConfigModelOpenGL::printSquad(GLuint texturaId) {
-	 glBindTexture(GL_TEXTURE_2D, texturaId); // enlaza la presente textura (de la estructura)
-	 // con la que hemos cargado, es decir, "texturaID"  
-	 glBegin(GL_QUADS);
-	 // piso del establecimiento
-	 // glColor3f(0.0f, 0.0f, 1.0f); // azul
-	 glTexCoord2f(0.0f, 0.0f); glVertex3f(-xrl, -y, -z);
-	 glTexCoord2f(1.0f, 0.0f); glVertex3f(xrl, -y, -z);
-	 glTexCoord2f(1.0f, 1.0f); glVertex3f(xrl, -y, (z - 1.0f));
-	 glTexCoord2f(0.0f, 1.0f); glVertex3f(-xrl, -y, (z - 1.0f));
-	 glEnd();
-	 //fin de la generación de la estructura
- }
-
- void ConfigModelOpenGL::printLeftWindowAndWall(GLuint texturaId) {
-	 glBindTexture(GL_TEXTURE_2D, texturaId); // enlaza la presente textura (de la estructura)
-	 // con la que hemos cargado, es decir, "texturaID"  
-	 glBegin(GL_QUADS);
-	 // pared izquierda
-	 // glColor3f(1.0f, 0.0f, 0.0f); // rojo
-	 glTexCoord2f(0.0f, 0.0f); glVertex3f(-xrl, -y, -z);
-	 glTexCoord2f(1.0f, 0.0f); glVertex3f(-xrl, -y, 0.5f);
-	 glTexCoord2f(1.0f, 1.0f); glVertex3f(-xrl, y, 0.5f);
-	 glTexCoord2f(0.0f, 1.0f); glVertex3f(-xrl, y, -z);
-	 glEnd();
- }
-
- void ConfigModelOpenGL::printRightWindowAndWall(GLuint texturaId) {
-	 glBindTexture(GL_TEXTURE_2D, texturaId); // enlaza la presente textura (de la estructura)
-	 // con la que hemos cargado, es decir, "texturaID"  
-	 glBegin(GL_QUADS);
-	 // pared derecha
-	 // glColor3f(1.0f, 0.0f, 0.0f); // rojo
-
-	 glTexCoord2f(0.0f, 0.0f); glVertex3f(xrl, -y, -z);
-	 glTexCoord2f(1.0f, 0.0f); glVertex3f(xrl, -y, 0.5f);
-	 glTexCoord2f(1.0f, 1.0f); glVertex3f(xrl, y, 0.5f);
-	 glTexCoord2f(0.0f, 1.0f); glVertex3f(xrl, y, -z);
-	 glEnd();
- }
-
-
- void ConfigModelOpenGL::printRearWallAndAnyObjects(GLuint texturaId) {
-
-	 glBindTexture(GL_TEXTURE_2D, texturaId); // enlaza la presente textura (de la estructura)
-	 // con la que hemos cargado, es decir, "texturaID"  
-	 glBegin(GL_QUADS);
-	 // Cara frontal
-	 //glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, 0.5f);
-	 //glTexCoord2f(1.0f, 0.0f); glVertex3f(0.5f, -0.5f, 0.5f);
-	 //glTexCoord2f(1.0f, 1.0f); glVertex3f(0.5f, 0.5f, 0.5f);
-	 //glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f, 0.5f, 0.5f);
-
-	 // pared trasera
-	 glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.35, -y, -1.5f);  // inferior izquierda
-	 glTexCoord2f(1.0f, 0.0f); glVertex3f(1.35f, -y, -1.5f);; // inferior derecha
-	 glTexCoord2f(1.0f, 1.0f); glVertex3f(1.35f, y, -1.5f);;  // superior derecha
-	 glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.35f, y, -1.5f); // superior izquierda
-	 glEnd();
-
- }
 
 //Configurar su visualización, proyección en perspectiva
 

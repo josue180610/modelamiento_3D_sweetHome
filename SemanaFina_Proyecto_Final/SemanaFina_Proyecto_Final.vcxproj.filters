@@ -24,8 +24,8 @@
     <ClCompile Include="ConfigModelOpenGL.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Usuario\OneDrive\Desktop\backup\print_objects.cpp">
-      <Filter>Archivos de encabezado</Filter>
+    <ClCompile Include="PrintModelOpenGL.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="ConfigModelOpenGL.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Usuario\OneDrive\Desktop\backup\print_objects.h">
+    <ClInclude Include="PrintModelOpenGL.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

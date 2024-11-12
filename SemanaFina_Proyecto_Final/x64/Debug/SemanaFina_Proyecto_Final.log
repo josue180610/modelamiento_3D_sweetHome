@@ -1,2 +1,3 @@
-﻿  main.cpp
-  SemanaFina_Proyecto_Final.vcxproj -> G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\SemanaFina_Proyecto_Final\x64\Debug\SemanaFina_Proyecto_Final.exe
+﻿  print_objects.cpp
+C:\Users\rventura\Downloads\modelamiento_3D_sweetHome-main\SemanaFina_Proyecto_Final\print_objects.cpp(52,15): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  SemanaFina_Proyecto_Final.vcxproj -> C:\Users\rventura\Downloads\modelamiento_3D_sweetHome-main\x64\Debug\SemanaFina_Proyecto_Final.exe

@@ -19,8 +19,6 @@ void procesarEntrada(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) rotacionY += 0.05f;
 }
 int main() {
-
-
 	if (!glfwInit()) { // Si el entorno no se inicializa correctamente
 		return -1; // termina el programa y devuelve un error
 	}

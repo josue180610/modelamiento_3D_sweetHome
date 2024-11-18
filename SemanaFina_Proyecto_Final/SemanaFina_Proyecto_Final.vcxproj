@@ -130,15 +130,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ConfigModelOpenGL.cpp" />
+    <ClCompile Include="configuracion.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PrintModelOpenGL.cpp" />
-    <ClCompile Include="screem_utils.cpp" />
+    <ClCompile Include="oficina.cpp" />
+    <ClCompile Include="mueble.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConfigModelOpenGL.h" />
-    <ClInclude Include="PrintModelOpenGL.h" />
-    <ClInclude Include="screem_utils.h" />
+    <ClInclude Include="configuracion.h" />
+    <ClInclude Include="oficina.h" />
+    <ClInclude Include="mueble.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,14 +24,14 @@ Configuracion cfg = Configuracion();
 void inicializarMuebles() {
     // x, y, z, ancho, alto, profundidad, color
     // Crear y agregar una mesa al vector de muebles
-    muebles.push_back({ 0.75f, 0.4f, 0.0f, 1.0f, 1.25f, 0.8f, {0.6f, 0.3f, 0.1f},"textures/objetos/cocina/cocina.png"});
+    muebles.push_back({ -1,0.75f, 0.4f, 0.0f, 1.0f, 1.25f, 0.8f, {0.6f, 0.3f, 0.1f},"textures/objetos/cocina/cocina.png"});
     // Crear y agregar una silla
-    muebles.push_back({ -2.5f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
+    muebles.push_back({ -1,-2.5f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
 
     // Crear y agregar un armario
-    muebles.push_back({ -1.0f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
+    muebles.push_back({ -1,-1.0f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
 
-    muebles.push_back({ 2.5f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
+    muebles.push_back({ -1,2.5f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
     // Cargar texturas
     sala[0]=cfg.cargarTextura("textures/pisos/textura-piso-05.jpg"); // piso
     sala[1]=cfg.cargarTextura("textures/paredes/textura-pared-05.jpg"); // paredes laterales
@@ -121,9 +121,10 @@ void configurarProyeccion() {
     glFrustum(left, right, bottom, top, nearPlane, farPlane); // Configurar la frustum
 }
 
-void dibujarMueble(const Mueble& mueble) {
+void dibujarMueble(const Mueble& mueble,float objectX, float objectY) {
     glPushMatrix();
     glTranslatef(mueble.x, mueble.y, mueble.z);
+    glTranslatef(objectX, objectY, 0.0f);
     //glColor3f(mueble.color[0], mueble.color[1], mueble.color[2]);
     dibujarCubo(mueble.ancho, mueble.alto, mueble.profundidad,mueble.texturaObjeto);
     glPopMatrix();

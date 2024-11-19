@@ -10,7 +10,7 @@ void dibujarCubo(float ancho, float alto, float profundidad, std::string textura
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D,cfg.cargarTextura(texturaObjeto.c_str()));
     glBegin(GL_QUADS);
-
+    
     // Cara frontal
     glTexCoord2f(0.0f, 0.0f); glVertex3f(-ancho / 2, -alto / 2, profundidad / 2);
     glTexCoord2f(1.0f, 0.0f); glVertex3f(ancho / 2, -alto / 2, profundidad / 2);

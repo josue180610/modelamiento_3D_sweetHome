@@ -1,4 +1,5 @@
 #include "configuracion.h"
+#include "movimentos.h"
 #include <stdexcept>
 #define STB_IMAGE_IMPLEMENTATION // constante utilizada para implementar texturas
 #include "include/stb_image.h" // incluimos la libreria de la carga de imágenes
@@ -82,4 +83,5 @@ void Configuracion::centrarPantallaPrincipal(GLFWwindow*& windows) {
 	// Establece como contexto actual, la ventana que se ha creado y en donde se ejecutará el código 
 	// siguiente al elemento window (actual)
 	glfwMakeContextCurrent(windows);
+
 }

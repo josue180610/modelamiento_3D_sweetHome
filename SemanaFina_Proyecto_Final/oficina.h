@@ -16,7 +16,7 @@ void inicializarMuebles();
 void dibujarSuelo();
 void procesarEntrada(GLFWwindow* window);
 void configurarProyeccion();
-void dibujarMueble(const Mueble& mueble);
+void dibujarMueble(const Mueble& mueble, float objectX, float objectY);
 void dibujarParedIzquierda();
 void dibujarParedDerecha();
 void dibujarParedFrontal();

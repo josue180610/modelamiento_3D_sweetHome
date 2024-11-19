@@ -9,7 +9,20 @@ float objectX = 0.0f;
 float objectY = 0.0f;
 float sensibilidad = 0.01f;
 bool isDragging = false;
+float rotacionX = 0.0f;
+float rotacionY = 0.0f;
+float rotacionZ = 2.5f;
 
+
+
+void moverPantalla(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) rotacionX -= 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) rotacionX += 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) rotacionY -= 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) rotacionY += 0.05f;
+}
+
+GLuint textura;
 void obtenerPosicionUltimaMouse(GLFWwindow* window, double xCurrentpos, double yCurrentpos) {
     if (isDragging) {
         /*Procedemos a calcular la diferencia entre la posición final y actual*/
@@ -55,23 +68,32 @@ int main() {
     inicializarMuebles(); // Inicializar los muebles en la oficina
     // Configurar la proyección en perspectiva
     configurarProyeccion();
-
+    float positionH = 1.75f;
+    float positionW = 0.5f;
+    float positionX = 2.5f;
+    float positionY = 1.25f;
+    float positionZ = 3.5f;
     // Bucle principal de renderizado
+    bool tieneTextura = false;
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla y el buffer de profundidad
 
         procesarEntrada(window); // Procesar entrada del usuario
-
         // Configurar la matriz de modelo-vista
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glTranslatef(0.0f, -1.0f, -10.0f); // Posicionar la cámara para ver el espacio de la oficina
-        
+        moverPantalla(window);
+        glRotatef(rotacionX, 1.0f, 0.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
+        glRotatef(rotacionY, 0.0f, 1.0f, 0.0f);
+
         dibujarSuelo(); // Dibujar el suelo de la oficina
         dibujarParedIzquierda();
         dibujarParedDerecha();
+        cfg.dibujarVentana(tieneTextura);
         dibujarParedFrontal();
-
+        
+        tieneTextura = true;
         // Dibujar cada mueble en su posición
         for (const auto& mueble : muebles) {
             dibujarMueble(mueble, objectX, objectY);

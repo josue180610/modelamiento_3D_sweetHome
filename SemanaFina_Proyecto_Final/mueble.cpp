@@ -3,12 +3,14 @@
 #include <string>
 #include "configuracion.h"
 
-void dibujarCubo(float ancho, float alto, float profundidad, std::string texturaObjeto) {
-    
-    Configuracion cfg = Configuracion();
 
+
+
+void dibujarCubo(float ancho, float alto, float profundidad, GLuint textura) {
+    
+    
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D,cfg.cargarTextura(texturaObjeto.c_str()));
+    glBindTexture(GL_TEXTURE_2D, textura);
     glBegin(GL_QUADS);
     
     // Cara frontal

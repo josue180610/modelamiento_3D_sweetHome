@@ -10,32 +10,49 @@
 #define M_PI 3.14159265358979323846 // Definir M_PI si no está definido
 #endif
 
-const float oficinaXMin = -3.5f, oficinaXMax = 3.5f; // Límites en el eje X
+const float oficinaXMin = -3.0f, oficinaXMax = 3.5f; // Límites en el eje X
 const float oficinaZMin = -3.0f, oficinaZMax = 3.0f; // Límites en el eje Z
 
 std::vector<Mueble> muebles;
 int muebleSeleccionado = 0;
 //
 // glBindTexture(GL_TEXTURE_2D, cfg.cargarTextura("textures/pisos/textura-piso-01.jpg")); // enlaza la presente textura (de la estructura)
-GLuint sala[2];
+GLuint salaParedesLaterales;
+GLuint salaParedFrontalAtras;
+GLuint salaPiso;
 GLuint objetos[2];
 Configuracion cfg = Configuracion();
 
 void inicializarMuebles() {
-    // x, y, z, ancho, alto, profundidad, color
+    // id,x, y, z, ancho, alto, profundidad, color
     // Crear y agregar una mesa al vector de muebles
-    muebles.push_back({ -1,0.75f, 0.4f, 0.0f, 1.0f, 1.25f, 0.8f, {0.6f, 0.3f, 0.1f},"textures/objetos/cocina/cocina.png"});
+    //muebles.push_back({ -1,0.75f, 0.4f, 0.0f, 1.0f, -1.25f, 0.8f, {0.6f, 0.3f, 0.1f},cfg.cargarTextura("textures/objetos/cocina/mesa_cocina_01.png") });
     // Crear y agregar una silla
-    muebles.push_back({ -1,-2.5f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
+    //muebles.push_back({ -1,-2.5f, 1.0f, -1.5f, 1.2f, -2.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mesa_cocina_01.png") });
 
     // Crear y agregar un armario
-    muebles.push_back({ -1,-1.0f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
+    // muebles.push_back({ -1,-1.0f, 1.0f, -1.5f, 1.2f, -2.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") }); //
+    float positionH = 2.5f;
+    float positionW = 1.2f;
+    float positionX = 2.5f;
+    float positionY = 1.25f;
+    float positionZ = 2.5f;
+    muebles.push_back({ -1,positionX, positionY, -positionZ, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") });// inferior esquina derecha 
+    muebles.push_back({ -1,-positionX, positionY, positionZ, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") }); // superior esquina izquierda
+    muebles.push_back({ -1,positionX, positionY, positionZ, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") }); // superior esquina derecha
+    muebles.push_back({ -1,-positionX, positionY, -positionZ, positionW, -positionH, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") });// inferior esquina izquierda 
 
-    muebles.push_back({ -1,2.5f, 1.0f, -1.5f, 1.2f, 2.5f, 0.5f, {0.5f, 0.4f, 0.3f},"textures/objetos/cocina/refrigeradora.png" });
+    // objeto del centro - mesa
+    muebles.push_back({ -1,0.0, 0.75f, 1.25f, 1.2f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") });// mesa de centro
+
+    // mueble en pared frontal tracera
+    muebles.push_back({ -1,0.0, 0.55f, -1.25f, 2.25f, -1.05f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") });// mesa de centro
+
+
     // Cargar texturas
-    sala[0]=cfg.cargarTextura("textures/pisos/textura-piso-05.jpg"); // piso
-    sala[1]=cfg.cargarTextura("textures/paredes/textura-pared-05.jpg"); // paredes laterales
-    sala[2]=cfg.cargarTextura("textures/paredes/textura-pared-01.jpg"); // pared tracera
+    salaPiso = cfg.cargarTextura("textures/pisos/textura-piso-05.jpg"); // piso
+    salaParedesLaterales = cfg.cargarTextura("textures/paredes/textura-pared-05.jpg"); // paredes laterales
+    salaParedFrontalAtras = cfg.cargarTextura("textures/paredes/textura-pared-01.jpg"); // pared tracera
 
 }
 
@@ -48,7 +65,7 @@ void deshabilitarTextura() {
 void dibujarSuelo() {
     
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, sala[0]);
+    glBindTexture(GL_TEXTURE_2D, salaPiso);
     glPushMatrix(); // Guardar la matriz de transformación actual
     //glColor3f(0.8f, 0.8f, 0.8f); // Establecer el color del suelo (gris claro)
     
@@ -67,6 +84,7 @@ void dibujarSuelo() {
 }
 
 void procesarEntrada(GLFWwindow* window) {
+
     const float velocidadMovimiento = 0.001f; // Velocidad de movimiento del mueble
 
     // Cambiar el mueble seleccionado al presionar la tecla TAB
@@ -85,25 +103,30 @@ void procesarEntrada(GLFWwindow* window) {
     Mueble& mueble = muebles[muebleSeleccionado];
 
     // Mover el mueble en función de las teclas de flecha presionadas, validando los límites
+
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
         if (mueble.x - mueble.ancho / 2 > oficinaXMin) {
             mueble.x -= velocidadMovimiento;
         }
+        
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
         if (mueble.x + mueble.ancho / 2 < oficinaXMax) {
             mueble.x += velocidadMovimiento;
         }
+        
     }
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
         if (mueble.z - mueble.profundidad / 2 > oficinaZMin) {
             mueble.z -= velocidadMovimiento;
         }
+        
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
         if (mueble.z + mueble.profundidad / 2 < oficinaZMax) {
             mueble.z += velocidadMovimiento;
         }
+        
     }
 }
 
@@ -124,16 +147,16 @@ void configurarProyeccion() {
 void dibujarMueble(const Mueble& mueble,float objectX, float objectY) {
     glPushMatrix();
     glTranslatef(mueble.x, mueble.y, mueble.z);
-    glTranslatef(objectX, objectY, 0.0f);
+    //glTranslatef(objectX, objectY, 0.0f);
     //glColor3f(mueble.color[0], mueble.color[1], mueble.color[2]);
-    dibujarCubo(mueble.ancho, mueble.alto, mueble.profundidad,mueble.texturaObjeto);
+    dibujarCubo(mueble.ancho, mueble.alto, mueble.profundidad,mueble.textura);
     glPopMatrix();
 }
 // Nueva función para dibujar la pared izquierda
 void dibujarParedIzquierda() {
     
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, sala[1]);
+    glBindTexture(GL_TEXTURE_2D, salaParedesLaterales);
     glPushMatrix();
     glBegin(GL_QUADS);
 
@@ -151,7 +174,7 @@ void dibujarParedIzquierda() {
 // Función modificada para dibujar la pared frontal (antes era la pared trasera)
 void dibujarParedFrontal() {
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, sala[2]);
+    glBindTexture(GL_TEXTURE_2D, salaParedFrontalAtras);
     glPushMatrix();
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f); glVertex3f(oficinaXMin, 0.0f, oficinaZMin);
@@ -168,7 +191,7 @@ void dibujarParedFrontal() {
 void dibujarParedDerecha() {
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, sala[1]);
+    glBindTexture(GL_TEXTURE_2D, salaParedesLaterales);
     glPushMatrix();
     glBegin(GL_QUADS);
     

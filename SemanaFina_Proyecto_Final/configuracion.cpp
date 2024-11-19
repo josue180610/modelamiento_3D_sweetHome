@@ -8,6 +8,27 @@ Configuracion::Configuracion() {
 
 }
 
+void Configuracion::dibujarVentana(bool textura) {
+
+	const float oficinaXMin = -3.0f, oficinaXMax = 3.5f; // Límites en el eje X
+	const float oficinaZMin = -3.0f, oficinaZMax = 3.0f; // Límites en el eje Z
+	float ventanaXMin = (oficinaXMin + oficinaXMax) / 2.0f - 1.0f; // Centrada, restando la mitad del ancho
+	float ventanaXMax = (oficinaXMin + oficinaXMax) / 2.0f + 1.0f; // Centrada, sumando la mitad del ancho
+	float ventanaYMin = 0.75f; // A una altura específica desde la base (por ejemplo, 0.75)
+	float ventanaYMax = 2.25f; // Altura máxima (ventanaYMin + altura ventana)
+	float ventanaZ = oficinaZMin; // Misma profundidad que la pared
+
+	
+	// Dibujar la ventana (puedes agregar textura aquí si lo deseas)
+	// glColor3f(0.6f, 0.8f, 1.0f); // Color de vidrio de ventana (opcional)
+	glBegin(GL_QUADS);
+	glVertex3f(ventanaXMin, ventanaYMin, ventanaZ);
+	glVertex3f(ventanaXMax, ventanaYMin, ventanaZ);
+	glVertex3f(ventanaXMax, ventanaYMax, ventanaZ);
+	glVertex3f(ventanaXMin, ventanaYMax, ventanaZ);
+	glEnd();
+}
+
 GLuint Configuracion::cargarTextura(const char* path) {
 	int w, h, ch; // ancho, alto y canal: valores por referencia
 	unsigned char* data = stbi_load(path, &w, &h, &ch, 0);
@@ -18,9 +39,9 @@ GLuint Configuracion::cargarTextura(const char* path) {
 	}
 
 	// Generar y enlazar la textura.
-	GLuint texturaId;
-	glGenTextures(1, &texturaId);// genera un único objeto de textura en OpenGL y almacena su identificador en texturaID.
-	glBindTexture(GL_TEXTURE_2D, texturaId); // vincula esta textura a la unidad de textura 2D
+	GLuint textura;
+	glGenTextures(1, &textura);// genera un único objeto de textura en OpenGL y almacena su identificador en texturaID.
+	glBindTexture(GL_TEXTURE_2D, textura); // vincula esta textura a la unidad de textura 2D
 
 	// Especificar los parametros de la textura (repetición, ubicaçión y comportamiento).
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -36,7 +57,7 @@ GLuint Configuracion::cargarTextura(const char* path) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	}
 	stbi_image_free(data); // Liberamos la imagen de la memoria.
-	return texturaId;
+	return textura;
 }
 
 void Configuracion::inicializarOpenGL() {

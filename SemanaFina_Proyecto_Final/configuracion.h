@@ -6,6 +6,7 @@ public:
 	void centrarPantallaPrincipal(GLFWwindow*& windows);
 	void inicializarOpenGL();
 	GLuint cargarTextura(const char* path);
+	void dibujarVentana(bool tieneTextura);
 	Configuracion();
 };
 

@@ -18,24 +18,24 @@
     <ClCompile Include="main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="screem_utils.cpp">
+    <ClCompile Include="oficina.cpp">
       <Filter>Archivos de encabezado</Filter>
     </ClCompile>
-    <ClCompile Include="ConfigModelOpenGL.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="mueble.cpp">
+      <Filter>Archivos de encabezado</Filter>
     </ClCompile>
-    <ClCompile Include="PrintModelOpenGL.cpp">
+    <ClCompile Include="configuracion.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="screem_utils.h">
+    <ClInclude Include="oficina.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="ConfigModelOpenGL.h">
+    <ClInclude Include="mueble.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="PrintModelOpenGL.h">
+    <ClInclude Include="configuracion.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

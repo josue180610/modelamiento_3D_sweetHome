@@ -1,65 +1,108 @@
-
-#include "screem_utils.h"   // Incluye el encabezado
+#include <GLFW/glfw3.h>
+#include "oficina.h"
+#include "configuracion.h"
 #include <iostream>
-#include "ConfigModelOpenGL.h"
-#include "PrintModelOpenGL.h"
-#define STB_IMAGE_IMPLEMENTATION // constante utilizada para implementar texturas
+
+float lastMouseX = 0.0f;
+float lastMouseY = 0.0f;
+float objectX = 0.0f;
+float objectY = 0.0f;
+float sensibilidad = 0.01f;
+bool isDragging = false;
+float rotacionX = 0.0f;
+float rotacionY = 0.0f;
+float rotacionZ = 2.5f;
 
 
-using namespace std;
 
-GLuint texturaID[3];
-GLuint windowsWall;
+void moverPantalla(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) rotacionX -= 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) rotacionX += 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) rotacionY -= 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) rotacionY += 0.05f;
+}
+
+GLuint textura;
+void obtenerPosicionUltimaMouse(GLFWwindow* window, double xCurrentpos, double yCurrentpos) {
+    if (isDragging) {
+        /*Procedemos a calcular la diferencia entre la posición final y actual*/
+        float deltaX = static_cast<float>(xCurrentpos - lastMouseX);
+        float deltaY = static_cast<float>(yCurrentpos - lastMouseY);
+
+        objectX += deltaX * sensibilidad; // 0.01f es la sensibilidad de movimiento del mouse en la posición X
+        objectY -= deltaY * sensibilidad;
+
+        /*Actualizar la nueva posición final*/
+        lastMouseX = static_cast<float>(xCurrentpos);
+        lastMouseY = static_cast<float>(yCurrentpos);
+
+    }
+}
+
+void activarMovimientoPorMouse(GLFWwindow* window, int buttonActive, int actionPress, int mods) {
+    /*Validar si tenemos apretado el click izquierdo*/
+    if (buttonActive == GLFW_MOUSE_BUTTON_LEFT && actionPress == GLFW_PRESS) {
+        isDragging = true;
+        // Obtener la posición inicial del mouse al presionar
+        double xLastMouseX = static_cast<double>(lastMouseX);
+        double yLastMouseY = static_cast<double>(lastMouseY);
+        glfwGetCursorPos(window, &xLastMouseX, &yLastMouseY);
+        lastMouseX = static_cast<float>(xLastMouseX);
+        lastMouseY = static_cast<float>(yLastMouseY);
+    }
+    else if (actionPress == GLFW_RELEASE) {
+        isDragging = false;
+    }
+}
+
 int main() {
-	/*valores para constructor ConfigModelOpenGL*/
-	float y = 1.0f;
-	float z = 1.5f;
-	float xrl = 1.35f;
-	float rotacionX = 0.0f;
-	float rotacionY = 0.0f;
-	float rotacionZ = 2.5f;
-	ConfigModelOpenGL modeloOpenGl = ConfigModelOpenGL();
-	PrintModelOpenGL windowOpenGl = PrintModelOpenGL(y, z, xrl,true,rotacionX,rotacionY,rotacionZ);
-	GLFWwindow* window;
-	modeloOpenGl.initWindowsCenter(window); // Obtengo el valor de la variable window por referencia
-	// Realizo la configuración de luminosidad para el objeto a mostrar.
-	modeloOpenGl.inicializarOpenGL();
-	// Establecer la matriz de proyección en perspectiva
-	modeloOpenGl.configFrustumParameter();
-	float xi = 1.0f;
-	float zi = 1.0f;
-	// Obtengo las texturas
-	modeloOpenGl.loadTextureFile("textures/ventanas/textura-ventana-02.jpg", texturaID[0]);
-	modeloOpenGl.loadTextureFile("textures/paredes/textura-pared-01.jpg", texturaID[1]);
-	modeloOpenGl.loadTextureFile("textures/pisos/textura-piso-03.jpg", texturaID[2]);
-	modeloOpenGl.loadTextureFile("image/ventanas/ventana02.png", windowsWall);
-	while (!glfwWindowShouldClose(window)) { // Ejecutar todo lo que se encuentre en la ventana, mientras no se cierre
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // permite borrar la pantalla, antes de dibujar
-		// esto evita que las imagenes se sobrepongan y también permite eliminar el buffer de produndidad
-		windowOpenGl.procesarEntrada(window, windowOpenGl.activeMove); // permite mover el objeto, es decir, la estructura
-		//Aplicar las transformaciones de visualización al cubo
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();//Reseteamos la matriz de modelo-vista
-		glTranslatef(0.0f, 0.0f, -windowOpenGl.rotacionZ); //Alejar la cámara
-		// glRotatef(0.0f, 1.0f, 1.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
-		// cout << "Entero: " << rotacionX << endl;
-	
-		glRotatef(windowOpenGl.rotacionX, 1.0f, 0.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
-		glRotatef(windowOpenGl.rotacionY, 0.0f, 1.0f, 0.0f);
-		windowOpenGl.enableTexture();
+    GLFWwindow* window;
+    Configuracion cfg = Configuracion();
+    cfg.centrarPantallaPrincipal(window);
 
-		windowOpenGl.printLeftWindowAndWall(texturaID[0]);
-		windowOpenGl.printRightWindowAndWall(texturaID[0]);
-		windowOpenGl.printRearWallAndAnyObjects(texturaID[1]);
-		windowOpenGl.printSquad(texturaID[2]);
+    glfwSetCursorPosCallback(window, obtenerPosicionUltimaMouse);
+    glfwSetMouseButtonCallback(window, activarMovimientoPorMouse);
 
-		windowOpenGl.disableTexture();
-		// glRotatef(anguloRotacion, 1.0f, 1.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
-		glfwSwapBuffers(window); // intercambiar el buffer de pantalla actual
-		// con el buffer del dibujo, es decir, el render.
-		glfwPollEvents(); // Gestión de dispositivos de entrada (mouse, teclado...)
-		// para interactuar con la ventana
-	}
-	glfwTerminate(); // termina la operación.
-	return 0;
+    cfg.inicializarOpenGL();
+
+    inicializarMuebles(); // Inicializar los muebles en la oficina
+    // Configurar la proyección en perspectiva
+    configurarProyeccion();
+    float positionH = 1.75f;
+    float positionW = 0.5f;
+    float positionX = 2.5f;
+    float positionY = 1.25f;
+    float positionZ = 3.5f;
+    // Bucle principal de renderizado
+    bool tieneTextura = false;
+    while (!glfwWindowShouldClose(window)) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla y el buffer de profundidad
+
+        procesarEntrada(window); // Procesar entrada del usuario
+        // Configurar la matriz de modelo-vista
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glTranslatef(0.0f, -1.0f, -10.0f); // Posicionar la cámara para ver el espacio de la oficina
+        moverPantalla(window);
+        glRotatef(rotacionX, 1.0f, 0.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
+        glRotatef(rotacionY, 0.0f, 1.0f, 0.0f);
+
+        dibujarSuelo(); // Dibujar el suelo de la oficina
+        dibujarParedIzquierda();
+        dibujarParedDerecha();
+        cfg.dibujarVentana(tieneTextura);
+        dibujarParedFrontal();
+        
+        tieneTextura = true;
+        // Dibujar cada mueble en su posición
+        for (const auto& mueble : muebles) {
+            dibujarMueble(mueble, objectX, objectY);
+        }
+
+        glfwSwapBuffers(window); // Intercambiar los buffers para mostrar el contenido en pantalla
+        glfwPollEvents(); // Procesar eventos de la ventana
+    }
+
+    glfwTerminate(); // Liberar los recursos de GLFW
+    return 0;
 }

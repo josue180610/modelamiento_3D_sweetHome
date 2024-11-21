@@ -16,10 +16,10 @@ float rotacionZ = 2.5f;
 
 
 void moverPantalla(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) rotacionX -= 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) rotacionX += 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) rotacionY -= 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) rotacionY += 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) rotacionX -= 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) rotacionX += 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) rotacionY -= 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) rotacionY += 0.05f;
 }
 
 GLuint textura;

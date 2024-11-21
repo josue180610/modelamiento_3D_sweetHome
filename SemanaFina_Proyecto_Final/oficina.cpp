@@ -32,21 +32,37 @@ void inicializarMuebles() {
 
     // Crear y agregar un armario
     // muebles.push_back({ -1,-1.0f, 1.0f, -1.5f, 1.2f, -2.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") }); //
+    //ancho
     float positionH = 2.5f;
+
     float positionW = 1.2f;
     float positionX = 2.5f;
+    //altura
     float positionY = 1.25f;
     float positionZ = 2.5f;
-    muebles.push_back({ -1,positionX, positionY, -positionZ, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") });// inferior esquina derecha 
-    muebles.push_back({ -1,-positionX, positionY, positionZ, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") }); // superior esquina izquierda
-    muebles.push_back({ -1,positionX, positionY, positionZ, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") }); // superior esquina derecha
-    muebles.push_back({ -1,-positionX, positionY, -positionZ, positionW, -positionH, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") });// inferior esquina izquierda 
 
-    // objeto del centro - mesa
-    muebles.push_back({ -1,0.0, 0.75f, 1.25f, 1.2f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") });// mesa de centro
+    float rotationY = 90.0f; 
+
+    //Refrigeradora
+    muebles.push_back({ -1, 3.2f, 1.25f, -2.35f, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png"), rotationY });
+
+    //Mueble de cocina
+    muebles.push_back({ -1, 3.2f, 0.75f, -0.4f, 2.6f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mueble-cocina-mesa.png"), -90.0f });
+
+    //Cocina
+    muebles.push_back({ -1, 3.2f, 0.75f, 1.56f, 1.2f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png"), rotationY });// mesa de centro
+
+    //Bar
+    muebles.push_back({ -1, -2.89f, 1.25f, -2.7f, 0.5f, -2.5, 0.15f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/bar.png"), rotationY });
+
+    //Televisor
+    muebles.push_back({ -1, -2.89f, 2.25f, 0.5f, 2.5f, -1.2, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/televisor.png"), rotationY });
+
+    //muebles.push_back({ -1,-positionX, positionY, -positionZ, positionW, -positionH, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") });
+    
 
     // mueble en pared frontal tracera
-    muebles.push_back({ -1,0.0, 0.55f, -1.25f, 2.25f, -1.05f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") });// mesa de centro
+    //muebles.push_back({ -1,0.0, 0.55f, -1.25f, 2.25f, -1.05f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") });// mesa de centro
 
 
     // Cargar texturas
@@ -147,6 +163,9 @@ void configurarProyeccion() {
 void dibujarMueble(const Mueble& mueble,float objectX, float objectY) {
     glPushMatrix();
     glTranslatef(mueble.x, mueble.y, mueble.z);
+    // Rotar el mueble en el eje Y (para cambiar su orientación)
+    glRotatef(mueble.rotacion, 0.0f, 1.0f, 0.0f);
+    // Rotar el mueble en el eje Y (para cambiar su orientación)
     //glTranslatef(objectX, objectY, 0.0f);
     //glColor3f(mueble.color[0], mueble.color[1], mueble.color[2]);
     dibujarCubo(mueble.ancho, mueble.alto, mueble.profundidad,mueble.textura);

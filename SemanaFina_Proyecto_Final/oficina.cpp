@@ -14,6 +14,7 @@ const float oficinaXMin = -3.0f, oficinaXMax = 3.5f; // Límites en el eje X
 const float oficinaZMin = -3.0f, oficinaZMax = 3.0f; // Límites en el eje Z
 
 std::vector<Mueble> muebles;
+
 int muebleSeleccionado = 0;
 //
 // glBindTexture(GL_TEXTURE_2D, cfg.cargarTextura("textures/pisos/textura-piso-01.jpg")); // enlaza la presente textura (de la estructura)
@@ -37,6 +38,7 @@ void inicializarMuebles() {
 
     float positionW = 1.2f;
     float positionX = 2.5f;
+
     //altura
     float positionY = 1.25f;
     float positionZ = 2.5f;
@@ -58,8 +60,12 @@ void inicializarMuebles() {
     //Televisor
     muebles.push_back({ -1, -2.89f, 2.25f, 0.5f, 2.5f, -1.2, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/televisor.png"), rotationY });
 
-    //muebles.push_back({ -1,-positionX, positionY, -positionZ, positionW, -positionH, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png") });
-    
+    //Sofa
+    muebles.push_back({ -1, -1.0, 0.75, 0.75, 1.5, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/sala-de-estar.png"), rotationY });
+
+    //Comedor
+    muebles.push_back({ -1, -0.5, 1.1, -1.7, 2.0, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/comedor-sala.png") });
+
 
     // mueble en pared frontal tracera
     //muebles.push_back({ -1,0.0, 0.55f, -1.25f, 2.25f, -1.05f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") });// mesa de centro
@@ -69,7 +75,6 @@ void inicializarMuebles() {
     salaPiso = cfg.cargarTextura("textures/pisos/textura-piso-05.jpg"); // piso
     salaParedesLaterales = cfg.cargarTextura("textures/paredes/textura-pared-05.jpg"); // paredes laterales
     salaParedFrontalAtras = cfg.cargarTextura("textures/paredes/textura-pared-01.jpg"); // pared tracera
-
 }
 
 
@@ -171,6 +176,12 @@ void dibujarMueble(const Mueble& mueble,float objectX, float objectY) {
     dibujarCubo(mueble.ancho, mueble.alto, mueble.profundidad,mueble.textura);
     glPopMatrix();
 }
+
+void dibujarMueblePersonalizado(const Mueble& mueble, float objectX, float objectY)
+{
+}
+
+
 // Nueva función para dibujar la pared izquierda
 void dibujarParedIzquierda() {
     

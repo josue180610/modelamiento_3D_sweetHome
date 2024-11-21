@@ -13,5 +13,6 @@ struct Mueble {
 };
 
 void dibujarCubo(float ancho, float alto, float profundidad,GLuint textura);
+void dibujarCuboPersonalizado(float ancho, float alto, float profundidad, GLuint textura);
 
 #endif

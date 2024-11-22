@@ -49,30 +49,30 @@ void inicializarMuebles() {
     float rotationY = 90.0f; 
 
     //Refrigeradora
-    muebles.push_back({ -1, 3.2f, 1.25f, -2.35f, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png"), 0.0f });
-    muebles.push_back({ -1, -1.0, 0.75, 0.75, 1.5, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/sala-de-estar.jpg"), 0.0f });
+    muebles.push_back({ -1, 3.2f, 1.25f, -2.35f, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png"), 90.0f });
 
     //Mueble de cocina
-    /*muebles.push_back({-1, 3.2f, 0.75f, -0.4f, 2.6f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mueble-cocina-mesa.png"), -90.0f});
+    muebles.push_back({ -1, 3.2f, 0.75f, -0.4f, 2.6f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mueble-cocina-mesa.png"), -90.0f});
 
     //Cocina
-    muebles.push_back({ -1, 3.2f, 0.75f, 1.56f, 1.2f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png"), rotationY });// mesa de centro
+    muebles.push_back({ -1, 3.2f, 0.75f, 1.56f, 1.2f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png"), 90.0f});// mesa de centro
 
     //Bar
-    muebles.push_back({ -1, -2.89f, 1.25f, -2.7f, 0.5f, -2.5, 0.15f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/bar.png"), rotationY });
+    muebles.push_back({ -1, -2.89f, 1.25f, -2.7f, 0.5f, -2.5, 0.15f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/bar.png"), 90.0f });
 
     //Televisor
-    muebles.push_back({ -1, -2.89f, 2.25f, 0.5f, 2.5f, -1.2, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/televisor.png"), rotationY });
+    muebles.push_back({ -1, -2.89f, 2.25f, 0.5f, 2.5f, -1.2, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/televisor.png"), 90.0f });
 
     //Sofa
+    muebles.push_back({ -1, -1.0, 0.75, 0.75, 1.5, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/sala-de-estar.png"), 90.0f });
 
     //Comedor
-    muebles.push_back({ -1, -0.5, 1.1, -1.7, 2.0, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/comedor-sala.png") });
+    muebles.push_back({ -1, -0.5, 1.1, -1.7, 2.0, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/comedor-sala.png"), 0.0f });
 
 
     // mueble en pared frontal tracera
     //muebles.push_back({ -1,0.0, 0.55f, -1.25f, 2.25f, -1.05f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") });// mesa de centro
-    */
+
 
     // Cargar texturas
     salaPiso = cfg.cargarTextura("textures/pisos/textura-piso-05.jpg"); // piso

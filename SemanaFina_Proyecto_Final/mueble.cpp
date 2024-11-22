@@ -11,6 +11,11 @@ void dibujarCubo(float ancho, float alto, float profundidad, GLuint textura) {
     
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, textura);
+
+    // Habilitar mezcla para transparencia
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glBegin(GL_QUADS);
     
     // Cara frontal
@@ -51,5 +56,35 @@ void dibujarCubo(float ancho, float alto, float profundidad, GLuint textura) {
 
     glEnd();
 
+    glDisable(GL_BLEND); // Deshabilitar mezcla después de dibujar el cubo
+    glDisable(GL_TEXTURE_2D);
+}
+
+void dibujarCuboPersonalizado(float ancho, float alto, float profundidad, GLuint textura) {
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textura);
+
+    // Habilitar mezcla para transparencia
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glBegin(GL_QUADS);
+
+    // Cara frontal
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-ancho / 2, -alto / 2, profundidad / 2);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(ancho / 2, -alto / 2, profundidad / 2);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(ancho / 2, alto / 2, profundidad / 2);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-ancho / 2, alto / 2, profundidad / 2);
+
+    // Cara trasera
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-ancho / 2, -alto / 2, -profundidad / 2);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(ancho / 2, -alto / 2, -profundidad / 2);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(ancho / 2, alto / 2, -profundidad / 2);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-ancho / 2, alto / 2, -profundidad / 2);
+
+    glEnd();
+
+    glDisable(GL_BLEND); // Deshabilitar mezcla después de dibujar el cubo
     glDisable(GL_TEXTURE_2D);
 }

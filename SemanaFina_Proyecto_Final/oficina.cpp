@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include "configuracion.h"
+#include <iostream>
 #define STB_IMAGE_IMPLEMENTATION // constante utilizada para implementar texturas
 
 
@@ -23,6 +24,8 @@ GLuint salaParedFrontalAtras;
 GLuint salaPiso;
 GLuint objetos[2];
 Configuracion cfg = Configuracion();
+
+using namespace std;
 
 void inicializarMuebles() {
     // id,x, y, z, ancho, alto, profundidad, color
@@ -46,10 +49,11 @@ void inicializarMuebles() {
     float rotationY = 90.0f; 
 
     //Refrigeradora
-    muebles.push_back({ -1, 3.2f, 1.25f, -2.35f, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png"), rotationY });
+    muebles.push_back({ -1, 3.2f, 1.25f, -2.35f, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png"), 0.0f });
+    muebles.push_back({ -1, -1.0, 0.75, 0.75, 1.5, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/sala-de-estar.jpg"), 0.0f });
 
     //Mueble de cocina
-    muebles.push_back({ -1, 3.2f, 0.75f, -0.4f, 2.6f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mueble-cocina-mesa.png"), -90.0f });
+    /*muebles.push_back({-1, 3.2f, 0.75f, -0.4f, 2.6f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mueble-cocina-mesa.png"), -90.0f});
 
     //Cocina
     muebles.push_back({ -1, 3.2f, 0.75f, 1.56f, 1.2f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png"), rotationY });// mesa de centro
@@ -61,7 +65,6 @@ void inicializarMuebles() {
     muebles.push_back({ -1, -2.89f, 2.25f, 0.5f, 2.5f, -1.2, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/televisor.png"), rotationY });
 
     //Sofa
-    muebles.push_back({ -1, -1.0, 0.75, 0.75, 1.5, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/sala-de-estar.png"), rotationY });
 
     //Comedor
     muebles.push_back({ -1, -0.5, 1.1, -1.7, 2.0, -2.5, 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/comedor-sala.png") });
@@ -69,7 +72,7 @@ void inicializarMuebles() {
 
     // mueble en pared frontal tracera
     //muebles.push_back({ -1,0.0, 0.55f, -1.25f, 2.25f, -1.05f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png") });// mesa de centro
-
+    */
 
     // Cargar texturas
     salaPiso = cfg.cargarTextura("textures/pisos/textura-piso-05.jpg"); // piso
@@ -105,9 +108,9 @@ void dibujarSuelo() {
 }
 
 void procesarEntrada(GLFWwindow* window) {
-
+    const float limiteAuxiliarMovimiento = 0.05f;
     const float velocidadMovimiento = 0.001f; // Velocidad de movimiento del mueble
-
+    const float velocidadRotacion = 0.05; // Velocidad de rotación del mueble
     // Cambiar el mueble seleccionado al presionar la tecla TAB
     static bool tabPresionado = false;
     if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
@@ -141,13 +144,25 @@ void procesarEntrada(GLFWwindow* window) {
         if (mueble.z - mueble.profundidad / 2 > oficinaZMin) {
             mueble.z -= velocidadMovimiento;
         }
-        
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
         if (mueble.z + mueble.profundidad / 2 < oficinaZMax) {
             mueble.z += velocidadMovimiento;
         }
         
+    }
+    bool condicionMovimiento = ((((mueble.z + mueble.profundidad / 2) + limiteAuxiliarMovimiento < oficinaZMax) && ((mueble.z - mueble.profundidad / 2) + limiteAuxiliarMovimiento > oficinaZMin)) &&
+        (((mueble.x - mueble.ancho / 2) + limiteAuxiliarMovimiento > oficinaXMin) && ((mueble.x + mueble.ancho / 2) + limiteAuxiliarMovimiento < oficinaXMax)));
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+        if (condicionMovimiento) {
+            mueble.anguloRotacion += velocidadRotacion;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+        
+        if (condicionMovimiento) {
+            mueble.anguloRotacion -= velocidadRotacion;
+        }
     }
 }
 
@@ -168,8 +183,7 @@ void configurarProyeccion() {
 void dibujarMueble(const Mueble& mueble,float objectX, float objectY) {
     glPushMatrix();
     glTranslatef(mueble.x, mueble.y, mueble.z);
-    // Rotar el mueble en el eje Y (para cambiar su orientación)
-    glRotatef(mueble.rotacion, 0.0f, 1.0f, 0.0f);
+    glRotatef(mueble.anguloRotacion, 0.0f, 1.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
     // Rotar el mueble en el eje Y (para cambiar su orientación)
     //glTranslatef(objectX, objectY, 0.0f);
     //glColor3f(mueble.color[0], mueble.color[1], mueble.color[2]);

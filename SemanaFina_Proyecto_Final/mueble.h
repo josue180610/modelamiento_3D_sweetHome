@@ -9,9 +9,8 @@ struct Mueble {
     float ancho, alto, profundidad; // Dimensiones del mueble (ancho, alto y profundidad)
     float color[3];       // Color del mueble (valores RGB)
     GLuint textura;
-    float rotacion;
+    float anguloRotacion;
 };
-
 void dibujarCubo(float ancho, float alto, float profundidad,GLuint textura);
 void dibujarCuboPersonalizado(float ancho, float alto, float profundidad, GLuint textura);
 

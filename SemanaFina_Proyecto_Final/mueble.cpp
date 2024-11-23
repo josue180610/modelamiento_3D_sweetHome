@@ -7,8 +7,6 @@
 
 
 void dibujarCubo(float ancho, float alto, float profundidad, GLuint textura) {
-    
-    
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, textura);
 
@@ -17,7 +15,7 @@ void dibujarCubo(float ancho, float alto, float profundidad, GLuint textura) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glBegin(GL_QUADS);
-    
+
     // Cara frontal
     glTexCoord2f(0.0f, 0.0f); glVertex3f(-ancho / 2, -alto / 2, profundidad / 2);
     glTexCoord2f(1.0f, 0.0f); glVertex3f(ancho / 2, -alto / 2, profundidad / 2);

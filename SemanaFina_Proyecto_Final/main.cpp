@@ -63,7 +63,7 @@ int main() {
     glfwSetCursorPosCallback(window, obtenerPosicionUltimaMouse);
     glfwSetMouseButtonCallback(window, activarMovimientoPorMouse);
 
-    cfg.inicializarOpenGL();
+    
 
     inicializarMuebles(); // Inicializar los muebles en la oficina
     // Configurar la proyección en perspectiva
@@ -75,6 +75,7 @@ int main() {
     float positionZ = 3.5f;
     // Bucle principal de renderizado
     bool tieneTextura = false;
+    cfg.inicializarOpenGL();
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla y el buffer de profundidad
 
@@ -90,7 +91,6 @@ int main() {
         dibujarSuelo(); // Dibujar el suelo de la oficina
         dibujarParedIzquierda();
         dibujarParedDerecha();
-        cfg.dibujarVentana(tieneTextura);
         dibujarParedFrontal();
         
         tieneTextura = true;

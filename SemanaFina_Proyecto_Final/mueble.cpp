@@ -1,5 +1,4 @@
 #include "mueble.h"
-#include <GLFW/glfw3.h>
 #include <string>
 #include "configuracion.h"
 

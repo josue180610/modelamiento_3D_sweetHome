@@ -1,8 +1,7 @@
 #include "oficina.h"
 #include "mueble.h"
-#include <GLFW/glfw3.h>
 #include <cmath>
-#include "configuracion.h"
+#include "ventana.h"
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION // constante utilizada para implementar texturas
 
@@ -23,7 +22,7 @@ GLuint salaParedesLaterales;
 GLuint salaParedFrontalAtras;
 GLuint salaPiso;
 GLuint objetos[2];
-Configuracion cfg = Configuracion();
+Ventana cfg = Ventana();
 
 using namespace std;
 

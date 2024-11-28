@@ -130,15 +130,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\glad.c" />
     <ClCompile Include="configuracion.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="oficina.cpp" />
     <ClCompile Include="mueble.cpp" />
+    <ClCompile Include="ventana.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="configuracion.h" />
     <ClInclude Include="oficina.h" />
     <ClInclude Include="mueble.h" />
+    <ClInclude Include="ventana.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

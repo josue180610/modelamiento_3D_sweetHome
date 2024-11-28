@@ -1,7 +1,8 @@
 #include <GLFW/glfw3.h>
-#include "oficina.h"
-#include "configuracion.h"
 #include <iostream>
+#include "ventana.h"
+#include "configuracion.h"
+#include "oficina.h"
 
 float lastMouseX = 0.0f;
 float lastMouseY = 0.0f;
@@ -12,7 +13,7 @@ bool isDragging = false;
 float rotacionX = 0.0f;
 float rotacionY = 0.0f;
 float rotacionZ = 2.5f;
-
+GLuint textura;
 
 
 void moverPantalla(GLFWwindow* window) {
@@ -22,49 +23,12 @@ void moverPantalla(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) rotacionY += 0.05f;
 }
 
-GLuint textura;
-void obtenerPosicionUltimaMouse(GLFWwindow* window, double xCurrentpos, double yCurrentpos) {
-    if (isDragging) {
-        /*Procedemos a calcular la diferencia entre la posición final y actual*/
-        float deltaX = static_cast<float>(xCurrentpos - lastMouseX);
-        float deltaY = static_cast<float>(yCurrentpos - lastMouseY);
-
-        objectX += deltaX * sensibilidad; // 0.01f es la sensibilidad de movimiento del mouse en la posición X
-        objectY -= deltaY * sensibilidad;
-
-        /*Actualizar la nueva posición final*/
-        lastMouseX = static_cast<float>(xCurrentpos);
-        lastMouseY = static_cast<float>(yCurrentpos);
-
-    }
-}
-
-void activarMovimientoPorMouse(GLFWwindow* window, int buttonActive, int actionPress, int mods) {
-    /*Validar si tenemos apretado el click izquierdo*/
-    if (buttonActive == GLFW_MOUSE_BUTTON_LEFT && actionPress == GLFW_PRESS) {
-        isDragging = true;
-        // Obtener la posición inicial del mouse al presionar
-        double xLastMouseX = static_cast<double>(lastMouseX);
-        double yLastMouseY = static_cast<double>(lastMouseY);
-        glfwGetCursorPos(window, &xLastMouseX, &yLastMouseY);
-        lastMouseX = static_cast<float>(xLastMouseX);
-        lastMouseY = static_cast<float>(yLastMouseY);
-    }
-    else if (actionPress == GLFW_RELEASE) {
-        isDragging = false;
-    }
-}
 
 int main() {
     GLFWwindow* window;
+    Ventana win = Ventana();
     Configuracion cfg = Configuracion();
-    cfg.centrarPantallaPrincipal(window);
-
-    glfwSetCursorPosCallback(window, obtenerPosicionUltimaMouse);
-    glfwSetMouseButtonCallback(window, activarMovimientoPorMouse);
-
-    
-
+    win.centrarPantallaPrincipal(window);
     inicializarMuebles(); // Inicializar los muebles en la oficina
     // Configurar la proyección en perspectiva
     configurarProyeccion();
@@ -92,7 +56,7 @@ int main() {
         dibujarParedIzquierda();
         dibujarParedDerecha();
         dibujarParedFrontal();
-        
+
         tieneTextura = true;
         // Dibujar cada mueble en su posición
         for (const auto& mueble : muebles) {
@@ -105,4 +69,5 @@ int main() {
 
     glfwTerminate(); // Liberar los recursos de GLFW
     return 0;
+
 }

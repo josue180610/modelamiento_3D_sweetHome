@@ -14,6 +14,30 @@ float rotacionX = 0.0f;
 float rotacionY = 0.0f;
 float rotacionZ = 2.5f;
 GLuint textura;
+Mueble* muebleClickSelecionado = nullptr; // Inicializado como nulo por defecto
+
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+
+        // Convertir las coordenadas de la ventana a coordenadas del mundo
+        // Aquí debes ajustar según tu configuración de cámara y proyección
+        float xworld = (float)xpos -535.0f; // Ajusta según tu configuración
+        float yworld = (float)ypos + 172.5f; // Ajusta según tu configuración
+
+        // Verificar si el clic ocurrió dentro de los límites del objeto
+        for (auto& mueble : muebles) {
+            if (xworld >= mueble.x - mueble.ancho / 2 && xworld <= mueble.x + mueble.ancho / 2 &&
+                yworld >= mueble.y - mueble.alto / 2 && yworld <= mueble.y + mueble.alto / 2) {
+                muebleClickSelecionado = &mueble;
+                std::cout << "Objeto seleccionado!" << std::endl;
+                break;
+            }
+        }
+    }
+}
 
 
 void moverPantalla(GLFWwindow* window) {
@@ -29,6 +53,10 @@ int main() {
     Ventana win = Ventana();
     Configuracion cfg = Configuracion();
     win.centrarPantallaPrincipal(window);
+
+    // Registrar la función de callback para eventos de mouse
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+
     inicializarMuebles(); // Inicializar los muebles en la oficina
     // Configurar la proyección en perspectiva
     configurarProyeccion();
@@ -43,7 +71,7 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla y el buffer de profundidad
 
-        procesarEntrada(window); // Procesar entrada del usuario
+        procesarEntrada(window,muebleClickSelecionado); // Procesar entrada del usuario
         // Configurar la matriz de modelo-vista
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();

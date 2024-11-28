@@ -8,17 +8,20 @@
 #include "include/stb_image.h" // incluimos la libreria de la carga de imágenes
 
 using namespace std;
+// Tamaño de la ventana
+Ventana::Ventana() {
+	screenWidth = 1024;
+	screenHeight = 640;
+}
 
 void Ventana::centrarPantallaPrincipal(GLFWwindow*& windows) {
 	// Inicializar GLFW
 	if (!glfwInit()) {
 		throw std::runtime_error("Error al inicializar GLFW.");
 	}
-	// Tamaño de la ventana
-	int windowWidth = 1024;
-	int windowHeight = 640;
 
-	windows = glfwCreateWindow(windowWidth, windowHeight, "Modelamiento: Interior de Hogar - Muebles", NULL, NULL);
+
+	windows = glfwCreateWindow(screenWidth, screenHeight, "Modelamiento: Interior de Hogar - Muebles", NULL, NULL);
 	if (!windows) {
 		glfwTerminate();
 		throw std::runtime_error("Error al inicializar la aplicación.");
@@ -33,8 +36,8 @@ void Ventana::centrarPantallaPrincipal(GLFWwindow*& windows) {
 	const int screenHeight = viewMode->height;
 
 	// Calculando posición x e y de la pantalla
-	const int screenPositionX = (screenWidth - windowWidth) / 2;
-	const int screenPositionY = (screenHeight - windowHeight) / 2;
+	const int screenPositionX = (screenWidth - screenWidth) / 2;
+	const int screenPositionY = (screenHeight - screenHeight) / 2;
 
 	// Permite cambiar la posición de la ventana creada con glfwCreateWindow
 	glfwSetWindowPos(windows, screenPositionX, screenPositionY);

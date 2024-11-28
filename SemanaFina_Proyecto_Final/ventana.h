@@ -6,6 +6,9 @@ class Ventana
 
 public:
 	void centrarPantallaPrincipal(GLFWwindow*& windows);
+	int screenWidth;
+	int screenHeight;
 	GLuint cargarTextura(const char* path);
+	Ventana();
 };
 

@@ -15,7 +15,7 @@ extern int muebleSeleccionado;  // Índice del mueble actualmente seleccionado pa
 // Funciones relacionadas con la oficina y los muebles
 void inicializarMuebles();
 void dibujarSuelo();
-void procesarEntrada(GLFWwindow* window, Mueble* muebleClickSelecionado);
+void procesarEntrada(GLFWwindow* window, bool muebleClickSelecionado, int indice);
 void configurarProyeccion();
 void dibujarMueble(const Mueble& mueble, float objectX, float objectY);
 void dibujarMueblePersonalizado(const Mueble& mueble, float objectX, float objectY);

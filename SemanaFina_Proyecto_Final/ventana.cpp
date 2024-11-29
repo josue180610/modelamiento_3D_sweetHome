@@ -12,6 +12,7 @@ using namespace std;
 Ventana::Ventana() {
 	screenWidth = 1024;
 	screenHeight = 640;
+
 }
 
 void Ventana::centrarPantallaPrincipal(GLFWwindow*& windows) {
@@ -21,23 +22,30 @@ void Ventana::centrarPantallaPrincipal(GLFWwindow*& windows) {
 	}
 
 
-	windows = glfwCreateWindow(screenWidth, screenHeight, "Modelamiento: Interior de Hogar - Muebles", NULL, NULL);
+	windows = glfwCreateWindow(Ventana::screenWidth, Ventana::screenHeight, "Modelamiento: Interior de Hogar - Muebles", NULL, NULL);
 	if (!windows) {
 		glfwTerminate();
 		throw std::runtime_error("Error al inicializar la aplicación.");
 	}
-
+	int actualWidth, actualHeight;
+	glfwGetFramebufferSize(windows, &actualWidth, &actualHeight);
+	if (Ventana::screenWidth != actualWidth) {
+		Ventana::screenWidth = actualWidth;
+	}
+	if (Ventana::screenHeight != actualHeight) {
+		Ventana::screenHeight = actualHeight;
+	}
 	// Calcular valores de la pantalla
 	const GLFWvidmode* viewMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	if (!viewMode) {
 		throw std::runtime_error("No se pudo obtener la información del modo de video del monitor primario.");
 	}
-	const int screenWidth = viewMode->width;
-	const int screenHeight = viewMode->height;
+	const int screenWidthWin = viewMode->width;
+	const int screenHeightWin = viewMode->height;
 
 	// Calculando posición x e y de la pantalla
-	const int screenPositionX = (screenWidth - screenWidth) / 2;
-	const int screenPositionY = (screenHeight - screenHeight) / 2;
+	const int screenPositionX = (screenWidthWin - Ventana::screenWidth) / 2;
+	const int screenPositionY = (screenHeightWin - Ventana::screenHeight) / 2;
 
 	// Permite cambiar la posición de la ventana creada con glfwCreateWindow
 	glfwSetWindowPos(windows, screenPositionX, screenPositionY);
@@ -53,12 +61,6 @@ void Ventana::centrarPantallaPrincipal(GLFWwindow*& windows) {
 		glfwTerminate();
 		throw std::runtime_error("Error al inicializar la aplicación.");
 	}
-
-	// 6. Configurar el viewport
-	/*
-	 Esto asegura que las dimensiones de la ventana estén correctamente aplicadas.
-	*/
-	glViewport(0, 0, 800, 600);
 
 }
 

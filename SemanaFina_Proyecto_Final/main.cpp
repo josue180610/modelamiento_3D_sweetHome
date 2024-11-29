@@ -6,6 +6,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+
+using namespace std;
 
 float lastMouseX = 0.0f;
 float lastMouseY = 0.0f;
@@ -17,27 +20,14 @@ float rotacionX = 0.0f;
 float rotacionY = 0.0f;
 float rotacionZ = 2.5f;
 GLuint textura;
-Mueble* muebleClickSelecionado = nullptr; // Inicializado como nulo por defecto
+bool muebleClickSelecionado = false; // Inicializado como nulo por defecto
 Ventana win = Ventana();
+int selectedID = -1;
 
 
-/*Proyección en perspectiva*/
-/*projectionMatrix: Define cómo se proyectan las coordenadas en la pantalla desde la perspectiva de la cámara.*/
-float fov = glm::radians(45.0f); // Campo de visión en grados
-float aspectRatio = static_cast<float>(win.screenWidth) / win.screenHeight; // Relación de aspecto
-float nearPlane = 0.1f; // Distancia mínima visible
-float farPlane = 100.0f; // Distancia máxima visible
-glm::mat4 projectionMatrix = glm::perspective(fov, aspectRatio, nearPlane, farPlane);
-
-/*Proyección global de la camara*/
-/*viewMatrix: Define dónde está la cámara y hacia dónde mira en el mundo*/
-glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
-glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-glm::mat4 camaraMatrix = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
-
-
-glm::vec3 screenToWorldRay(double xpos, double ypos, int screenWidth, int screenHeight,
+/*Permite normalizar las coordenadas del trazo del click en un entorno 3D para validar si existe o no, 
+la intercepción con el cubo 3D*/
+glm::vec3 normalizarPosicionVentana(double xpos, double ypos, int screenWidth, int screenHeight,
     const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
     // Normaliza las coordenadas de pantalla
     float x = (2.0f * xpos) / screenWidth - 1.0f;
@@ -54,7 +44,7 @@ glm::vec3 screenToWorldRay(double xpos, double ypos, int screenWidth, int screen
     return glm::normalize(rayWorld);
 }
 
-bool rayIntersectsBox(const glm::vec3& rayOrigin, const glm::vec3& rayDirection,
+bool intercepcionRayoCubo(const glm::vec3& rayOrigin, const glm::vec3& rayDirection,
     const glm::vec3& boxMin, const glm::vec3& boxMax) {
     float tMin = (boxMin.x - rayOrigin.x) / rayDirection.x;
     float tMax = (boxMax.x - rayOrigin.x) / rayDirection.x;
@@ -81,24 +71,44 @@ bool rayIntersectsBox(const glm::vec3& rayOrigin, const glm::vec3& rayDirection,
     return true;
 }
 
-int pickCube(double xpos, double ypos) {
+int obtenerPosicionCubo(double xpos, double ypos) {
+
+    /*Proyección en perspectiva*/
+    /*projectionMatrix: Define cómo se proyectan las coordenadas en la pantalla desde la perspectiva de la cámara.*/
+    float fov = glm::radians(45.0f); // Campo de visión en grados
+    float aspectRatio = static_cast<float>(win.screenWidth) / win.screenHeight; // Relación de aspecto
+    float nearPlane = 0.1f; // Distancia mínima visible
+    float farPlane = 100.0f; // Distancia máxima visible
+    glm::mat4 projectionMatrix = glm::perspective(fov, aspectRatio, nearPlane, farPlane);
+
+    /*Proyección global de la camara*/
+    /*variables para posición de la cámara*/
+    glm::vec3 cameraPosition = glm::vec3(0.0f, -1.0f, -10.0f); // Cámara en la posición inicial
+    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f); // Punto hacia el que la cámara está mirando
+    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); // Vecto hacia arriba
+    /*viewMatrix: Define dónde está la cámara y hacia dónde mira en el mundo*/
+    glm::mat4 camaraMatrix = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+
     glm::vec3 rayOrigin = cameraPosition; // La posición de tu cámara
-    glm::vec3 rayDirection = screenToWorldRay(xpos, ypos, win.screenWidth, win.screenHeight, camaraMatrix, projectionMatrix);
+    glm::vec3 rayDirection = normalizarPosicionVentana(xpos, ypos, win.screenWidth, win.screenHeight, camaraMatrix, projectionMatrix);
 
     int selectedID = -1;
     float closestDistance = FLT_MAX;
 
     for (const auto& mueble : muebles) {
-        // Calcula las esquinas del mueble en base a su posición y dimensiones
-        glm::vec3 boxMin = glm::vec3(mueble.x - (mueble.ancho * 0.5f),
-            mueble.y - (mueble.alto * 0.5f),
-            mueble.z - (mueble.profundidad * 0.5f));
-        glm::vec3 boxMax = glm::vec3(mueble.x + (mueble.ancho * 0.5f),
-            mueble.y + (mueble.alto * 0.5f),
-            mueble.z + (mueble.profundidad * 0.5f));
 
-        if (rayIntersectsBox(rayOrigin, rayDirection, boxMin, boxMax)) {
-            float distance = glm::length(glm::vec3(mueble.x, mueble.y, mueble.z) - rayOrigin);
+        // Calcula las esquinas del mueble en base a su posición y dimensiones
+        glm::vec3 boxMin = glm::vec3(mueble.x - (mueble.ancho * 0.55f),
+            mueble.y - (mueble.alto * 0.55f),
+            mueble.z - (mueble.profundidad * 0.55f));
+        glm::vec3 boxMax = glm::vec3(mueble.x + (mueble.ancho * 0.55f),
+            mueble.y + (mueble.alto * 0.55f),
+            mueble.z + (mueble.profundidad * 0.55f));
+
+      
+
+        if (intercepcionRayoCubo(rayOrigin, rayDirection, boxMin, boxMax)) {
+            float distance = glm::length(rayOrigin - boxMin);
             if (distance < closestDistance) {
                 closestDistance = distance;
                 selectedID = mueble.id;
@@ -110,17 +120,19 @@ int pickCube(double xpos, double ypos) {
 }
 
 
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+void obtenerClickDelMouse(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
-
-        int selectedID = pickCube(xpos, ypos);
+        cout << "xpos :" << xpos << "ypos :" << ypos << endl;
+        selectedID = obtenerPosicionCubo(xpos, ypos);
         if (selectedID != -1) {
             std::cout << "Cubo seleccionado con ID: " << selectedID << std::endl;
+            muebleClickSelecionado = true;
         }
         else {
             std::cout << "No se seleccionó ningún cubo." << std::endl;
+            muebleClickSelecionado = false;
         }
     }
 }
@@ -129,10 +141,19 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 
 void moverPantalla(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) rotacionX -= 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) rotacionX += 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) rotacionY -= 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) rotacionY += 0.05f;
+    float pantallaSpeed = 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        rotacionX -= pantallaSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        rotacionX += pantallaSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        rotacionY -= pantallaSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        rotacionY += pantallaSpeed;
+    }
 }
 
 
@@ -142,23 +163,18 @@ int main() {
     win.centrarPantallaPrincipal(window);
 
     // Registrar la función de callback para eventos de mouse
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetMouseButtonCallback(window, obtenerClickDelMouse);
 
     inicializarMuebles(); // Inicializar los muebles en la oficina
     // Configurar la proyección en perspectiva
     configurarProyeccion();
-    float positionH = 1.75f;
-    float positionW = 0.5f;
-    float positionX = 2.5f;
-    float positionY = 1.25f;
-    float positionZ = 3.5f;
     // Bucle principal de renderizado
     bool tieneTextura = false;
     cfg.inicializarOpenGL();
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla y el buffer de profundidad
 
-        procesarEntrada(window,muebleClickSelecionado); // Procesar entrada del usuario
+        procesarEntrada(window,muebleClickSelecionado,selectedID); // Procesar entrada del usuario
         // Configurar la matriz de modelo-vista
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();

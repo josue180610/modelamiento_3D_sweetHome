@@ -43,7 +43,7 @@ void inicializarMuebles() {
     muebles.push_back({ 0, 2.85f, 1.25f, -posicionPegadoPared, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png"), 0.0f });
 
     //Mueble de cocina
-    muebles.push_back({ 1, -posicionPegadoParedLateral, 0.75f, -posicionPegadoPared, 2.6f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mueble-cocina-mesa.png"), 0.0f });
+    muebles.push_back({ 1, -posicionPegadoParedLateral, 0.75f, -posicionPegadoPared, 2.5f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mueble-cocina-mesa.png"), 0.0f });
 
     //Cocina
     muebles.push_back({ 2, 0.255F, 0.75f, -posicionPegadoPared, positionW, -(positionH - 1.0f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png"), 0.0f });// mesa de centro
@@ -52,21 +52,21 @@ void inicializarMuebles() {
     muebles.push_back({ 3, 0.255F, 2.38f, -posicionPegadoPared, positionW, -(positionH - 1.5f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/campana.png"), 0.0f });// mesa de centro
 
     //Minibar
-    muebles.push_back({ 4, 1.45F, 0.75f, -posicionPegadoPared, 2.25f, -(positionH - 1.0f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/minibar.png"), 0.0f });// mesa de centro
+    muebles.push_back({ 4, 1.55F, 0.75f, -posicionPegadoPared, (positionW+0.225f), -(positionH - 1.0f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/minibar.png"), 0.0f });// mesa de centro
 
     //Bar
     //muebles.push_back({ -1, -2.89f, 1.25f, -2.35f, 0.5f, -2.5, 0.15f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/bar.png"), 90.0f });
 
     //Televisor
-    muebles.push_back({ 5, -2.89f, 2.25f, 0.5f, 2.5f, -1.2, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/televisor.png"), 90.0f });
-    muebles.push_back({ 6, -2.8f, 0.25f, 0.5f, 2.5f, -0.35, 0.25f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/mueble-tv.png"), 90.0f });// mesa de centro
+    muebles.push_back({ 5, -2.89f, 1.4f, 1.25f, 2.5f, -1.2, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/televisor.png"), 90.0f });
+    muebles.push_back({ 6, -2.8f, 0.25f, 1.25f, 2.5f, -0.45, 0.25f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/mueble-tv.png"), 90.0f });// mesa de centro
 
 
     //Sofa
     muebles.push_back({ 7, 3.25f, 0.55f, 0.5f, 2.5f, -1.0, 0.25f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/sala-de-estar.png"), 90.0f });
 
     //Isla para cocina
-    muebles.push_back({ 8, 0.65f, 0.825f,-0.85f, 5.5f, -1.5f, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/isla-cocina.png"), 0.0f });
+    muebles.push_back({ 8, 0.65f, 0.825f,-0.85f, 5.5f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/isla-cocina.png"), 0.0f });
 
 
     // Cargar texturas
@@ -103,14 +103,15 @@ void dibujarSuelo() {
 
 }
 
-void procesarEntrada(GLFWwindow* window, Mueble* muebleClickSelecionado) {
+void procesarEntrada(GLFWwindow* window, bool muebleClickSelecionado, int indice) {
     const float limiteAuxiliarMovimiento = 0.05f;
     const float velocidadMovimiento = 0.001f; // Velocidad de movimiento del mueble
-    const float velocidadRotacion = 0.05; // Velocidad de rotación del mueble
+    const float velocidadRotacion = 0.025; // Velocidad de rotación del mueble
     // Cambiar el mueble seleccionado al presionar la tecla TAB
     static bool tabPresionado = false;
     if (muebleClickSelecionado) {
-        Mueble& mueble = *muebleClickSelecionado;
+        // Obtener referencia al mueble actualmente seleccionado
+        Mueble& mueble = muebles[indice];
 
         // Obtener referencia al mueble actualmente seleccionado
         // Mueble& mueble = muebles[muebleSeleccionado];

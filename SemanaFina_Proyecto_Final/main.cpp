@@ -23,6 +23,22 @@ bool muebleClickSelecionado = false; // Inicializado como nulo por defecto
 Ventana win = Ventana();
 int selectedID = -1;
 
+void menuDeMovimiento() {
+    cout << "Opciones disponibles para movimiento de objetos" << endl;
+    cout << "===============================================" << endl;
+    cout << "Refrigeradora - tecla 0." << endl;
+    cout << "Mueble de cocina - tecla 1." << endl;
+    cout << "Cocina - tecla 2." << endl;
+    cout << "Campana - tecla 3." << endl;
+    cout << "Minibar - tecla 4." << endl;
+    cout << "Televisor - tecla 5." << endl;
+    cout << "Mueble para tv - tecla 6." << endl;
+    cout << "Sofa - tecla 7." << endl;
+    cout << "Isla para cocina - tecla 8." << endl;
+    cout << "===============================================" << endl;
+
+}
+
 //Metodo para mover la estructura que hace referencia a la sala
 void moverPantalla(GLFWwindow* window) {
     float pantallaSpeed = 0.05f;
@@ -61,6 +77,7 @@ void manejarMovimiento(GLFWwindow* window) {
 
 
 int main() {
+    menuDeMovimiento();
     GLFWwindow* window;
     Configuracion cfg = Configuracion();
     // Inicializar la variable windows y centrar dicha pantalla

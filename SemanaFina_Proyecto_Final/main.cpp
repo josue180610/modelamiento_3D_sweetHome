@@ -43,7 +43,7 @@ void moverPantalla(GLFWwindow* window) {
 //Metodo para asignarle numeros a los objetos
 void manejarSeleccion(GLFWwindow* window) {
     for (int i = 0; i < muebles.size(); i++) {
-        if (glfwGetKey(window, GLFW_KEY_1 + i) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_0 + i) == GLFW_PRESS) {
             selectedObjectIndex = i;
             //mostrarInformacionObjeto();
         }

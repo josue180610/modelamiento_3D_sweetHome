@@ -1,1 +1,4 @@
-﻿  SemanaFina_Proyecto_Final.vcxproj -> G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\x64\Debug\SemanaFina_Proyecto_Final.exe
+﻿  main.cpp
+G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\SemanaFina_Proyecto_Final\main.cpp(108,20): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\SemanaFina_Proyecto_Final\main.cpp(140,20): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+  SemanaFina_Proyecto_Final.vcxproj -> G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\x64\Debug\SemanaFina_Proyecto_Final.exe

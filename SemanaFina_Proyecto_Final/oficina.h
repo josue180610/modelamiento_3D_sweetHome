@@ -17,6 +17,7 @@ void inicializarMuebles();
 void dibujarSuelo();
 void procesarEntrada(GLFWwindow* window, int indice);
 void configurarProyeccion();
+GLuint cargarTextura(const char* path);
 void dibujarMueble(const Mueble& mueble, float objectX, float objectY);
 void dibujarMueblePersonalizado(const Mueble& mueble, float objectX, float objectY);
 void dibujarParedIzquierda();

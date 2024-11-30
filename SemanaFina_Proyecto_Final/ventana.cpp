@@ -1,11 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+#include "oficina.h"
 #include "ventana.h"
 #include <stdexcept>
-
-#define STB_IMAGE_IMPLEMENTATION // constante utilizada para implementar texturas
-#include "include/stb_image.h" // incluimos la libreria de la carga de imágenes
+#include <iostream>
 
 using namespace std;
 // Tamaño de la ventana
@@ -14,6 +12,80 @@ Ventana::Ventana() {
 	screenHeight = 640;
 
 }
+
+/*==============================================*/
+GLuint selectionFBO, selectionTexture;
+
+void Ventana::activarClickDeMouse(int x, int y) {
+	glBindFramebuffer(GL_FRAMEBUFFER, selectionFBO); // Bind del framebuffer de selección
+	glReadBuffer(GL_COLOR_ATTACHMENT0); // Establece el buffer de lectura al color del FBO
+
+	unsigned char pixel[3]; // Para almacenar el color del píxel seleccionado
+	glReadPixels(x, screenHeight - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel); // Leer el píxel en las coordenadas (x, y)
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0); // Restaurar el framebuffer a su estado normal
+
+	// Convertir el color del píxel a un ID
+	int id = pixel[0] | (pixel[1] << 8) | (pixel[2] << 16);
+	std::cout << "Cubo seleccionado con ID: " << id << std::endl;
+
+	// Procesar la selección
+	for (auto& mueble : muebles) {
+		if (mueble.id == id) { // Si el ID coincide con el mueble
+			muebleSeleccionado = id; // Establecer el mueble como seleccionado
+			break;
+		}
+	}
+}
+
+void Ventana::onMouseClick(GLFWwindow* window, int button, int action, int mods) {
+	if (action == GLFW_PRESS) { // Solo procesar si el botón fue presionado
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos); // Obtener la posición del cursor
+
+		// Llamar a la función para procesar la selección en base a la posición
+		activarClickDeMouse((int)xpos, (int)ypos);
+	}
+}
+
+
+void Ventana::renderizarMueblePorSeleccion() {
+	glBindFramebuffer(GL_FRAMEBUFFER, selectionFBO);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar el framebuffer de selección
+	
+}
+
+void Ventana::restaurarMueblePorSeleccion() {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+}
+
+void Ventana::inicializarFramebufferSeleccion(int width, int height) {
+	glad_glGenFramebuffers(1, &selectionFBO);
+	glad_glBindFramebuffer(GL_FRAMEBUFFER, selectionFBO);
+	// Crear la textura para almacenar colores únicos
+	glad_glGenTextures(1, &selectionTexture);
+	glad_glBindTexture(GL_TEXTURE_2D, selectionTexture);
+	glad_glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glad_glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glad_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, selectionTexture, 0);
+
+	// Crear un Renderbuffer para el depth buffer
+	GLuint depthRenderbuffer;
+	glad_glGenRenderbuffers(1, &depthRenderbuffer);
+	glad_glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+	glad_glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+	glad_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+
+
+	if (glad_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cerr << "Error: Framebuffer de selección no está completo." << std::endl;
+	}
+
+	glad_glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+/*==============================================*/
 
 void Ventana::centrarPantallaPrincipal(GLFWwindow*& windows) {
 	// Inicializar GLFW
@@ -62,35 +134,4 @@ void Ventana::centrarPantallaPrincipal(GLFWwindow*& windows) {
 		throw std::runtime_error("Error al inicializar la aplicación.");
 	}
 
-}
-
-GLuint Ventana::cargarTextura(const char* path) {
-	int w, h, ch; // ancho, alto y canal: valores por referencia
-	unsigned char* data = stbi_load(path, &w, &h, &ch, 0);
-	if (!data) {
-		printf("Error al cargar la textura\n");// se notifica el error
-		glfwTerminate();
-		throw std::runtime_error("Error al inicializar la aplicación.");
-	}
-
-	// Generar y enlazar la textura.
-	GLuint textura;
-	glGenTextures(1, &textura);// genera un único objeto de textura en OpenGL y almacena su identificador en texturaID.
-	glBindTexture(GL_TEXTURE_2D, textura); // vincula esta textura a la unidad de textura 2D
-
-	// Especificar los parametros de la textura (repetición, ubicaçión y comportamiento).
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// Cargar los datos de la imágen en la textura.
-	if (ch == 3) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	}
-	else if (ch == 4) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	}
-	stbi_image_free(data); // Liberamos la imagen de la memoria.
-	return textura;
 }

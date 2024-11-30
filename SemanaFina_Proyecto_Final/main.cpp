@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
+
 using namespace std;
 
 int selectedObjectIndex = -1;
@@ -22,6 +23,10 @@ float rotacionZ = 2.5f;
 bool muebleClickSelecionado = false; // Inicializado como nulo por defecto
 Ventana win = Ventana();
 int selectedID = -1;
+
+void activarClickDeMouse(GLFWwindow* window, int button, int action, int mods) {
+    win.onMouseClick(window,button,action,mods);
+}
 
 void menuDeMovimiento() {
     cout << "Opciones disponibles para movimiento de objetos" << endl;
@@ -65,6 +70,7 @@ void manejarSeleccion(GLFWwindow* window) {
         }
     }
 }
+
 //Metodo para realizar el movimiento de los objetos
 void manejarMovimiento(GLFWwindow* window) {
     if (selectedObjectIndex >= 0 && selectedObjectIndex < muebles.size()) {
@@ -74,7 +80,6 @@ void manejarMovimiento(GLFWwindow* window) {
 
     }
 }
-
 
 int main() {
     menuDeMovimiento();
@@ -88,10 +93,31 @@ int main() {
     configurarProyeccion();
     cfg.inicializarOpenGL();
 
-
+    // Inicializar el framebuffer para selección
+    win.inicializarFramebufferSeleccion(win.screenWidth, win.screenHeight);
+    // Establecer la función de callback para manejar clics del ratón
+    // Configurar el callback para clics del ratón
+    glfwSetMouseButtonCallback(window, activarClickDeMouse);
     while (!glfwWindowShouldClose(window)) {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla y el buffer de profundidad
+        win.renderizarMueblePorSeleccion();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar el framebuffer de selección
 
+        // Dibujar cada mueble en su posición
+        for (size_t i = 0; i < muebles.size(); ++i) {
+            auto& mueble = muebles[i];
+            int id = i + 1; // Asegúrate de que el ID no sea 0 (negro)
+            float r = ((id & 0x000000FF) >> 0) / 255.0f;
+            float g = ((id & 0x0000FF00) >> 8) / 255.0f;
+            float b = ((id & 0x00FF0000) >> 16) / 255.0f;
+            mueble.color[0] = r;
+            mueble.color[1] = g;
+            mueble.color[2] = b;
+            mueble.id = id;
+            dibujarMueble(mueble, objectX, objectY);
+        }
+        win.restaurarMueblePorSeleccion();
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
         manejarSeleccion(window);
         manejarMovimiento(window);
 
@@ -108,11 +134,19 @@ int main() {
         dibujarParedDerecha();
         dibujarParedFrontal();
 
-        // Dibujar cada mueble en su posición
-        for (const auto& mueble : muebles) {
+        // Dibujar cada mueble en su posición con textura
+        for (size_t i = 0; i < muebles.size(); ++i) {
+            auto& mueble = muebles[i];
+            int id = i + 1; // Asegúrate de que el ID no sea 0 (negro)
+            float r = ((id & 0x000000FF) >> 0) / 255.0f;
+            float g = ((id & 0x0000FF00) >> 8) / 255.0f;
+            float b = ((id & 0x00FF0000) >> 16) / 255.0f;
+            mueble.color[0] = r;
+            mueble.color[1] = g;
+            mueble.color[2] = b;
+            mueble.id = id;
             dibujarMueble(mueble, objectX, objectY);
         }
-
         glfwSwapBuffers(window); // Intercambiar los buffers para mostrar el contenido en pantalla
         glfwPollEvents(); // Procesar eventos de la ventana
     }

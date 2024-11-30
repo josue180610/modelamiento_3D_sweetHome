@@ -10,7 +10,7 @@
 
 using namespace std;
 
-int selectedObjectIndex = -1; // Índice del objeto seleccionado (-1 = ninguno)
+int selectedObjectIndex = -1;
 float movimientoVelocidad = 0.001f;
 float rotacionVelocidad = 0.05f;
 
@@ -174,7 +174,7 @@ void moverPantalla(GLFWwindow* window) {
 
 //Metodo para asignarle numeros a los objetos
 void manejarSeleccion(GLFWwindow* window) {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < muebles.size(); i++) {
         if (glfwGetKey(window, GLFW_KEY_1 + i) == GLFW_PRESS) {
             selectedObjectIndex = i;
             //mostrarInformacionObjeto();

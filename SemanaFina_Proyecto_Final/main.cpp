@@ -1,85 +1,83 @@
 #include <GLFW/glfw3.h>
-#include "oficina.h"
+#include <iostream>
+#include "ventana.h"
 #include "configuracion.h"
+#include "oficina.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
-float lastMouseX = 0.0f;
-float lastMouseY = 0.0f;
+using namespace std;
+
+int selectedObjectIndex = -1;
+float movimientoVelocidad = 0.001f;
+float rotacionVelocidad = 0.05f;
+
 float objectX = 0.0f;
 float objectY = 0.0f;
-float sensibilidad = 0.01f;
-bool isDragging = false;
 float rotacionX = 0.0f;
 float rotacionY = 0.0f;
 float rotacionZ = 2.5f;
+bool muebleClickSelecionado = false; // Inicializado como nulo por defecto
+Ventana win = Ventana();
+int selectedID = -1;
 
-
-
+//Metodo para mover la estructura que hace referencia a la sala
 void moverPantalla(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) rotacionX -= 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) rotacionX += 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) rotacionY -= 0.05f;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) rotacionY += 0.05f;
+    float pantallaSpeed = 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        rotacionX -= pantallaSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        rotacionX += pantallaSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        rotacionY -= pantallaSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        rotacionY += pantallaSpeed;
+    }
 }
 
-GLuint textura;
-void obtenerPosicionUltimaMouse(GLFWwindow* window, double xCurrentpos, double yCurrentpos) {
-    if (isDragging) {
-        /*Procedemos a calcular la diferencia entre la posición final y actual*/
-        float deltaX = static_cast<float>(xCurrentpos - lastMouseX);
-        float deltaY = static_cast<float>(yCurrentpos - lastMouseY);
-
-        objectX += deltaX * sensibilidad; // 0.01f es la sensibilidad de movimiento del mouse en la posición X
-        objectY -= deltaY * sensibilidad;
-
-        /*Actualizar la nueva posición final*/
-        lastMouseX = static_cast<float>(xCurrentpos);
-        lastMouseY = static_cast<float>(yCurrentpos);
+//Metodo para asignarle numeros a los objetos
+void manejarSeleccion(GLFWwindow* window) {
+    for (int i = 0; i < muebles.size(); i++) {
+        if (glfwGetKey(window, GLFW_KEY_1 + i) == GLFW_PRESS) {
+            selectedObjectIndex = i;
+            //mostrarInformacionObjeto();
+        }
+    }
+}
+//Metodo para realizar el movimiento de los objetos
+void manejarMovimiento(GLFWwindow* window) {
+    if (selectedObjectIndex >= 0 && selectedObjectIndex < muebles.size()) {
+        // Permite realizar el movimiento de un mueble, en base al indice de su posición.
+        // El mueble solo se puede mover hasta cierto límite, respetando su entorno.
+        procesarEntrada(window, selectedObjectIndex); 
 
     }
 }
 
-void activarMovimientoPorMouse(GLFWwindow* window, int buttonActive, int actionPress, int mods) {
-    /*Validar si tenemos apretado el click izquierdo*/
-    if (buttonActive == GLFW_MOUSE_BUTTON_LEFT && actionPress == GLFW_PRESS) {
-        isDragging = true;
-        // Obtener la posición inicial del mouse al presionar
-        double xLastMouseX = static_cast<double>(lastMouseX);
-        double yLastMouseY = static_cast<double>(lastMouseY);
-        glfwGetCursorPos(window, &xLastMouseX, &yLastMouseY);
-        lastMouseX = static_cast<float>(xLastMouseX);
-        lastMouseY = static_cast<float>(yLastMouseY);
-    }
-    else if (actionPress == GLFW_RELEASE) {
-        isDragging = false;
-    }
-}
 
 int main() {
     GLFWwindow* window;
     Configuracion cfg = Configuracion();
-    cfg.centrarPantallaPrincipal(window);
-
-    glfwSetCursorPosCallback(window, obtenerPosicionUltimaMouse);
-    glfwSetMouseButtonCallback(window, activarMovimientoPorMouse);
-
-    
-
-    inicializarMuebles(); // Inicializar los muebles en la oficina
+    // Inicializar la variable windows y centrar dicha pantalla
+    win.centrarPantallaPrincipal(window); 
+    // Inicializar los muebles en la oficina
+    inicializarMuebles(); 
     // Configurar la proyección en perspectiva
     configurarProyeccion();
-    float positionH = 1.75f;
-    float positionW = 0.5f;
-    float positionX = 2.5f;
-    float positionY = 1.25f;
-    float positionZ = 3.5f;
-    // Bucle principal de renderizado
-    bool tieneTextura = false;
     cfg.inicializarOpenGL();
+
+
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla y el buffer de profundidad
 
-        procesarEntrada(window); // Procesar entrada del usuario
+        manejarSeleccion(window);
+        manejarMovimiento(window);
+
         // Configurar la matriz de modelo-vista
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -92,8 +90,7 @@ int main() {
         dibujarParedIzquierda();
         dibujarParedDerecha();
         dibujarParedFrontal();
-        
-        tieneTextura = true;
+
         // Dibujar cada mueble en su posición
         for (const auto& mueble : muebles) {
             dibujarMueble(mueble, objectX, objectY);
@@ -105,4 +102,5 @@ int main() {
 
     glfwTerminate(); // Liberar los recursos de GLFW
     return 0;
+
 }

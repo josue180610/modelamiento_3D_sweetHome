@@ -99,9 +99,9 @@ int main() {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glTranslatef(0.0f, -1.0f, -10.0f); // Posicionar la cámara para ver el espacio de la oficina
-        moverPantalla(window);
-        glRotatef(rotacionX, 1.0f, 0.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn
-        glRotatef(rotacionY, 0.0f, 1.0f, 0.0f);
+        moverPantalla(window); //permite actualizar los valores de las variables de rotación X e Y, para movimiento de camara.
+        glRotatef(rotacionX, 1.0f, 0.0f, 0.0f); //rotar el cubo para una mejor visualizaciòn sobre el eje Y.
+        glRotatef(rotacionY, 0.0f, 1.0f, 0.0f); //rotar el cubo para una mejor visualización sobre el eje X.
 
         dibujarSuelo(); // Dibujar el suelo de la oficina
         dibujarParedIzquierda();

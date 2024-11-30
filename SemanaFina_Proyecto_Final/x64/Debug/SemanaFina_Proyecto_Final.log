@@ -1,4 +1,6 @@
-﻿  main.cpp
-C:\Users\rventura\source\repos\modelamiento_3D_sweetHome\SemanaFina_Proyecto_Final\main.cpp(40,13): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\rventura\source\repos\modelamiento_3D_sweetHome\SemanaFina_Proyecto_Final\main.cpp(41,13): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-  SemanaFina_Proyecto_Final.vcxproj -> C:\Users\rventura\source\repos\modelamiento_3D_sweetHome\x64\Debug\SemanaFina_Proyecto_Final.exe
+﻿  oficina.cpp
+G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\SemanaFina_Proyecto_Final\oficina.cpp(47,56): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\SemanaFina_Proyecto_Final\oficina.cpp(49,56): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\SemanaFina_Proyecto_Final\oficina.cpp(92,37): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\SemanaFina_Proyecto_Final\oficina.cpp(145,15): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  SemanaFina_Proyecto_Final.vcxproj -> G:\UPN-2024\Ciclo agosto - diciembre\Computación grafica y visual\Proyecto final\modelamiento_3D_sweetHome\x64\Debug\SemanaFina_Proyecto_Final.exe

@@ -2,9 +2,7 @@
 #include <string>
 #include "configuracion.h"
 
-
-
-
+// Metodo encargado de obtener las coordenadas y las texturas para dibujar los cubos
 void dibujarCubo(float ancho, float alto, float profundidad, GLuint textura) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, textura);

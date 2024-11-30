@@ -13,62 +13,44 @@ const float oficinaZMin = -3.0f, oficinaZMax = 3.0f; // Límites en el eje Z
 
 std::vector<Mueble> muebles;
 
-int muebleSeleccionado = 0;
-//
-// glBindTexture(GL_TEXTURE_2D, cfg.cargarTextura("textures/pisos/textura-piso-01.jpg")); // enlaza la presente textura (de la estructura)
+// Texturas principales del entorno(sala)
 GLuint salaParedesLaterales;
 GLuint salaParedFrontalAtras;
 GLuint salaPiso;
-GLuint objetos[2];
+// Clase de configuración del windows
 Ventana cfg = Ventana();
 
 using namespace std;
 
+// Metodo utilizado para dibujar los muebles.
 void inicializarMuebles() {
     // id,x, y, z, ancho, alto, profundidad, color
-    //ancho
     float positionH = 2.5f;
-
     float positionW = 1.2f;
     float positionX = 2.5f;
-
-    //altura
     float positionY = 1.25f;
     float positionZ = 2.5f;
-
     float rotationY = 90.0f;
     float posicionPegadoPared = oficinaZMax - 0.265f;
     float posicionPegadoParedLateral = 1.65f;
     //Refrigeradora
     muebles.push_back({ 0, 2.85f, 1.25f, -posicionPegadoPared, positionW, -positionH, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/refrigeradora.png"), 0.0f });
-
     //Mueble de cocina
     muebles.push_back({ 1, -posicionPegadoParedLateral, 0.75f, -posicionPegadoPared, 2.5f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/mueble-cocina-mesa.png"), 0.0f });
-
     //Cocina
-    muebles.push_back({ 2, 0.255F, 0.75f, -posicionPegadoPared, positionW, -(positionH - 1.0f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png"), 0.0f });// mesa de centro
-
+    muebles.push_back({ 2, 0.255F, 0.75f, -posicionPegadoPared, positionW, -(positionH - 1.0f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/cocina.png"), 0.0f });
     //Campana
-    muebles.push_back({ 3, 0.255F, 2.38f, -posicionPegadoPared, positionW, -(positionH - 1.5f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/campana.png"), 0.0f });// mesa de centro
-
+    muebles.push_back({ 3, 0.255F, 2.38f, -posicionPegadoPared, positionW, -(positionH - 1.5f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/cocina/campana.png"), 0.0f });
     //Minibar
-    muebles.push_back({ 4, 1.55F, 0.75f, -posicionPegadoPared, (positionW+0.225f), -(positionH - 1.0f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/minibar.png"), 0.0f });// mesa de centro
-
-    //Bar
-    //muebles.push_back({ -1, -2.89f, 1.25f, -2.35f, 0.5f, -2.5, 0.15f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/bar.png"), 90.0f });
-
+    muebles.push_back({ 4, 1.55F, 0.75f, -posicionPegadoPared, (positionW+0.225f), -(positionH - 1.0f), 0.5f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/minibar.png"), 0.0f });
     //Televisor
     muebles.push_back({ 5, -2.89f, 1.4f, 1.25f, 2.5f, -1.2, 0.1f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/televisor.png"), 90.0f });
-    muebles.push_back({ 6, -2.8f, 0.25f, 1.25f, 2.5f, -0.45, 0.25f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/mueble-tv.png"), 90.0f });// mesa de centro
-
-
+    //Mueble para tv
+    muebles.push_back({ 6, -2.8f, 0.25f, 1.25f, 2.5f, -0.45, 0.25f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/mueble-tv.png"), 90.0f });
     //Sofa
-    muebles.push_back({ 7, 3.25f, 0.55f, 0.5f, 2.5f, -1.0, 0.25f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/sala-de-estar.png"), 90.0f });
-
+    muebles.push_back({ 7, 3.25f, 0.55f, 1.25f, 2.25f, -1.0, 0.25f,{0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/sala-de-estar.png"), 90.0f });
     //Isla para cocina
-    muebles.push_back({ 8, 0.65f, 0.825f,-0.85f, 5.5f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/isla-cocina.png"), 0.0f });
-
-
+    muebles.push_back({ 8, -0.65f, 0.825f,-0.85f, 4.5f, -1.5f, 0.5f, {0.5f, 0.4f, 0.3f},cfg.cargarTextura("textures/objetos/sala/isla-cocina.png"), 0.0f });
     // Cargar texturas
     salaPiso = cfg.cargarTextura("textures/pisos/textura-piso-05.jpg"); // piso
     salaParedesLaterales = cfg.cargarTextura("textures/paredes/textura-pared-05.jpg"); // paredes laterales
@@ -103,18 +85,14 @@ void dibujarSuelo() {
 
 }
 
-void procesarEntrada(GLFWwindow* window, bool muebleClickSelecionado, int indice) {
+//Permite el movimiento en los ejes x,y,z de los objetos
+void procesarEntrada(GLFWwindow* window, int indice) {
     const float limiteAuxiliarMovimiento = 0.05f;
     const float velocidadMovimiento = 0.001f; // Velocidad de movimiento del mueble
     const float velocidadRotacion = 0.025; // Velocidad de rotación del mueble
-    // Cambiar el mueble seleccionado al presionar la tecla TAB
-    static bool tabPresionado = false;
-    if (muebleClickSelecionado) {
+ 
         // Obtener referencia al mueble actualmente seleccionado
         Mueble& mueble = muebles[indice];
-
-        // Obtener referencia al mueble actualmente seleccionado
-        // Mueble& mueble = muebles[muebleSeleccionado];
 
         // Mover el mueble en función de las teclas de flecha presionadas, validando los límites
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
@@ -154,7 +132,7 @@ void procesarEntrada(GLFWwindow* window, bool muebleClickSelecionado, int indice
             }
         }
 
-    }
+    
 }
 
 void configurarProyeccion() {
